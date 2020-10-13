@@ -1,1 +1,1 @@
-# 2020-B3-Teamical
+移动智能开发第三小组项目TeamIcal代码仓库
