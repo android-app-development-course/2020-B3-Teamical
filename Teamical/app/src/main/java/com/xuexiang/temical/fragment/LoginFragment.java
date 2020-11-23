@@ -72,6 +72,7 @@ public class LoginFragment extends BaseFragment {
                 .setImmersive(true);
         titleBar.setBackgroundColor(Color.TRANSPARENT);
         titleBar.setTitle("");
+
         titleBar.setLeftImageDrawable(ResUtils.getVectorDrawable(getContext(), R.drawable.ic_login_close));
         titleBar.setActionTextColor(ThemeUtils.resolveColor(getContext(), R.attr.colorAccent));
         titleBar.addAction(new TitleBar.TextAction(R.string.title_jump_login) {

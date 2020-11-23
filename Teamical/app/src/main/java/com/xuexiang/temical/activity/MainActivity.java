@@ -38,6 +38,7 @@ import com.xuexiang.temical.core.BaseActivity;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.fragment.AboutFragment;
 import com.xuexiang.temical.fragment.ComplexCalendarFragment;
+import com.xuexiang.temical.fragment.NewEventFragment;
 import com.xuexiang.temical.fragment.SettingsFragment;
 import com.xuexiang.temical.fragment.news.NewsFragment;
 import com.xuexiang.temical.fragment.profile.ProfileFragment;
@@ -157,6 +158,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         //侧边栏点击事件
         navView.setNavigationItemSelectedListener(menuItem -> {
+            XToastUtils.toast("!!!" + menuItem.getTitle());
             if (menuItem.isCheckable()) {
                 drawerLayout.closeDrawers();
                 return handleNavigationItemSelected(menuItem);
@@ -167,6 +169,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         break;
                     case R.id.nav_about:
                         openNewPage(AboutFragment.class);
+                        break;
+                    case R.id.nav_event:
+                        XToastUtils.toast("点击了:" + menuItem.getTitle());
+                        openNewPage(NewEventFragment.class);
                         break;
                     default:
                         XToastUtils.toast("点击了:" + menuItem.getTitle());

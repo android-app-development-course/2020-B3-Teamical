@@ -37,6 +37,13 @@
             android:icon="@drawable/ic_menu_person"
             android:title="@string/menu_profile" />
 
+        <item
+            android:id="@+id/nav_event"
+            android:icon="@drawable/ic_menu_person"
+            android:checkable="false"
+            android:title="日程" />
+
+
 
     </group>
 
@@ -46,7 +53,7 @@
 
         <item
             android:id="@+id/nav_search"
-            android:checkable="false"
+            android:checkable="true"
             android:icon="@drawable/ic_menu_search"
             android:title="@string/menu_search" />
 
