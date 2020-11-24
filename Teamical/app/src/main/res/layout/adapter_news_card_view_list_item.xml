@@ -63,7 +63,7 @@
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginStart="4dp"
                     android:textColor="@color/xui_config_color_pure_black"
-                    tools:text="xuexiangjys" />
+                    tools:text="schedule" />
             </LinearLayout>
 
             <TextView
@@ -109,15 +109,15 @@
 
             </LinearLayout>
 
-            <com.xuexiang.xui.widget.imageview.RadiusImageView
-                android:id="@+id/iv_image"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="8dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/xui_ic_default_img"
-                app:riv_border_width="0dp"
-                app:riv_corner_radius="5dp" />
+<!--            <com.xuexiang.xui.widget.imageview.RadiusImageView-->
+<!--                android:id="@+id/iv_image"-->
+<!--                android:layout_width="80dp"-->
+<!--                android:layout_height="80dp"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/xui_ic_default_img"-->
+<!--                app:riv_border_width="0dp"-->
+<!--                app:riv_corner_radius="5dp" />-->
 
         </LinearLayout>
 
@@ -132,31 +132,31 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iv_praise"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_praise" />
+<!--                <androidx.appcompat.widget.AppCompatImageView-->
+<!--                    android:id="@+id/iv_praise"-->
+<!--                    android:layout_width="16dp"-->
+<!--                    android:layout_height="16dp"-->
+<!--                    android:src="@drawable/ic_praise" />-->
 
-                <TextView
-                    android:id="@+id/tv_praise"
-                    style="@style/TextStyle.Explain"
-                    android:layout_marginStart="5dp"
-                    tools:text="点赞" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_praise"-->
+<!--                    style="@style/TextStyle.Explain"-->
+<!--                    android:layout_marginStart="5dp"-->
+<!--                    tools:text="点赞" />-->
 
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iv_comment"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginStart="30dp"
-                    android:src="@drawable/ic_comment" />
+<!--                <androidx.appcompat.widget.AppCompatImageView-->
+<!--                    android:id="@+id/iv_comment"-->
+<!--                    android:layout_width="16dp"-->
+<!--                    android:layout_height="16dp"-->
+<!--                    android:layout_marginStart="30dp"-->
+<!--                    android:src="@drawable/ic_comment" />-->
 
-                <TextView
-                    android:id="@+id/tv_comment"
-                    style="@style/TextStyle.Explain"
-                    android:layout_marginStart="5dp"
-                    tools:text="评论" />
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_comment"-->
+<!--                    style="@style/TextStyle.Explain"-->
+<!--                    android:layout_marginStart="5dp"-->
+<!--                    tools:text="评论" />-->
 
 
             </LinearLayout>

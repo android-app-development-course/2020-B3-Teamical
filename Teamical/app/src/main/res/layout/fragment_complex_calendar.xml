@@ -15,7 +15,7 @@
   ~
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -85,8 +85,8 @@
                 android:layout_height="match_parent"
                 android:contentDescription="@string/app_name"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_camera"
-                android:tint="#000000" />
+                android:tint="#000000"
+                app:srcCompat="@drawable/ic_camera" />
 
             <TextView
                 android:id="@+id/tv_current_day"
@@ -160,11 +160,26 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
+            android:layout_marginBottom="10sp"
             android:background="#F2F2F2"
             android:overScrollMode="never" />
 
 
     </com.haibin.calendarview.CalendarLayout>
 
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/fab_recycler_view"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
 
-</LinearLayout>
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+
+<!--        android:layout_margin="@dimen/spacing_16"-->
+<!--        android:layout_marginBottom="@dimen/activity_vertical_margin"-->
+<!--        android:src="@drawable/icon_more"-->
+<!--        app:layout_behavior="com.xuexiang.xuidemo.widget.FabBehavior" />-->
+
+    <include layout="@layout/menu_statelayout_fab"/>
+</RelativeLayout>

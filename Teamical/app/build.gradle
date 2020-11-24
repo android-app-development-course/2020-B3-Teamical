@@ -92,6 +92,8 @@ dependencies {
     androidTestImplementation deps.runner
     androidTestImplementation deps.espresso.core
 
+    // FloatingActionButtonMenu
+    implementation 'com.github.clans:fab:1.6.4'
     //分包
     implementation deps.androidx.multidex
 

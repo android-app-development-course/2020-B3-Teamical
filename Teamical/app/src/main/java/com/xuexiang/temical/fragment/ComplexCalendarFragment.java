@@ -22,10 +22,14 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
+import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xui.adapter.recyclerview.XLinearLayoutManager;
@@ -66,6 +70,13 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
+    @BindView(R.id.fab_menu)
+    FloatingActionMenu mFloatingActionMenu;
+
+
+//    @BindView(R.id.fab_recycler_view)
+//    FloatingActionButton fab;
+
     private int mYear;
 
     @Override
@@ -90,6 +101,7 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
         initCalendarView();
 
         initRecyclerView();
+
     }
 
     private void initRecyclerView() {
@@ -104,6 +116,7 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
 
     @Override
     protected void initListeners() {
+//        fab.setOnClickListener(v -> {XToastUtils.toast("添加日程");});
         mCalendarView.setOnCalendarSelectListener(this);
         mCalendarView.setOnYearChangeListener(this);
     }
@@ -171,7 +184,7 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
     @SingleClick
     @OnClick({R.id.tv_month_day, R.id.fl_current})
     public void onViewClicked(View view) {
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.tv_month_day:
                 if (!mCalendarLayout.isExpand()) {
                     mCalendarLayout.expand();
@@ -188,5 +201,36 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
             default:
                 break;
         }
+    }
+
+    // 为浮动按钮绑定事件
+    @SingleClick
+    @OnClick({R.id.fab_quick_add, R.id.fab_simple_add})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_quick_add:
+                quickAdd();
+                break;
+            case R.id.fab_simple_add:
+                simpleAdd();
+                break;
+            default:
+                break;
+        }
+        mFloatingActionMenu.toggle(false);
+    }
+
+    /**
+     * 快速添加
+     */
+    protected void quickAdd() {
+        XToastUtils.toast("快速添加日程");
+    }
+
+    /**
+     * 普通添加
+     */
+    protected void simpleAdd() {
+        XToastUtils.toast("普通添加日程");
     }
 }
