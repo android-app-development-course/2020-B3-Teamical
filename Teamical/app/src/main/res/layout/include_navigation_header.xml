@@ -54,15 +54,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_sign"
-        style="@style/TextStyle.Explain"
-        android:layout_width="240dp"
-        android:layout_marginTop="?attr/xui_config_content_spacing_vertical"
-        android:gravity="start"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:singleLine="false" />
 
     <Space
         android:layout_width="wrap_content"

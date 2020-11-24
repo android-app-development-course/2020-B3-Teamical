@@ -40,9 +40,8 @@ import com.xuexiang.temical.fragment.AboutFragment;
 import com.xuexiang.temical.fragment.ComplexCalendarFragment;
 import com.xuexiang.temical.fragment.NewEventFragment;
 import com.xuexiang.temical.fragment.SettingsFragment;
-import com.xuexiang.temical.fragment.news.NewsFragment;
 import com.xuexiang.temical.fragment.profile.ProfileFragment;
-import com.xuexiang.temical.fragment.trending.TrendingFragment;
+import com.xuexiang.temical.fragment.TeamFragment;
 import com.xuexiang.temical.utils.Utils;
 import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
@@ -51,6 +50,7 @@ import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xutil.XUtil;
+import com.xuexiang.xutil.app.ActivityUtils;
 import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         //主页内容填充
         BaseFragment[] fragments = new BaseFragment[]{
                 new ComplexCalendarFragment(),
-                new TrendingFragment(),
+                new TeamFragment(),
                 new ProfileFragment()
         };
         FragmentAdapter<BaseFragment> adapter = new FragmentAdapter<>(getSupportFragmentManager(), fragments);
@@ -128,17 +128,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         LinearLayout navHeader = headerView.findViewById(R.id.nav_header);
         RadiusImageView ivAvatar = headerView.findViewById(R.id.iv_avatar);
         TextView tvAvatar = headerView.findViewById(R.id.tv_avatar);
-        TextView tvSign = headerView.findViewById(R.id.tv_sign);
-
         if (Utils.isColorDark(ThemeUtils.resolveColor(this, R.attr.colorAccent))) {
             tvAvatar.setTextColor(Colors.WHITE);
-            tvSign.setTextColor(Colors.WHITE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ivAvatar.setImageTintList(ResUtils.getColors(R.color.xui_config_color_white));
             }
         } else {
             tvAvatar.setTextColor(ThemeUtils.resolveColor(this, R.attr.xui_config_color_title_text));
-            tvSign.setTextColor(ThemeUtils.resolveColor(this, R.attr.xui_config_color_explain_text));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ivAvatar.setImageTintList(ResUtils.getColors(R.color.xui_config_color_gray_3));
             }
@@ -146,8 +142,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         // TODO: 2019-10-09 初始化数据
         ivAvatar.setImageResource(R.drawable.ic_default_head);
-        tvAvatar.setText(R.string.app_name);
-        tvSign.setText("这个家伙很懒，什么也没有留下～～");
+        tvAvatar.setText("未登录");
         navHeader.setOnClickListener(this);
     }
 
@@ -206,9 +201,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_privacy:
-                Utils.showPrivacyDialog(this, null);
-                break;
             default:
                 break;
         }
@@ -220,7 +212,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.nav_header:
-                XToastUtils.toast("点击头部！");
+                ActivityUtils.startActivity(LoginActivity.class);
                 break;
             default:
                 break;

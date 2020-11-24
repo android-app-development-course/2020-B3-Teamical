@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="colorPrimary">#299EE3</color>
-    <color name="colorPrimaryDark">#299EE3</color>
-    <color name="colorAccent">#299EE3</color>
+    <color name="colorPrimary">#64B5F6</color>
+    <color name="colorPrimaryDark">#64B5F6</color>
+    <color name="colorAccent">#64B5F6</color>
 
 
     <!--Toast，可自定义喜欢的颜色-->

@@ -100,7 +100,7 @@
                     android:layout_height="50dp"
                     app:sDividerLineType="both"
 
-                    app:sLeftTextString="团队提醒"
+                    app:sLeftTextString="团队日程"
                     app:sLeftViewMarginLeft="35dp"
                     app:sRightViewMarginRight="10dp"
                     app:sRightViewType="switchBtn"

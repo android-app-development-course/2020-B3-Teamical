@@ -15,7 +15,7 @@
  *
  */
 
-package com.xuexiang.temical.fragment.trending;
+package com.xuexiang.temical.fragment;
 
 import com.xuexiang.temical.R;
 import com.xuexiang.temical.core.BaseFragment;
@@ -28,7 +28,7 @@ import com.xuexiang.xui.widget.actionbar.TitleBar;
  * @since 2019-10-30 00:19
  */
 @Page(anim = CoreAnim.none)
-public class TrendingFragment extends BaseFragment {
+public class TeamFragment extends BaseFragment {
 
     /**
      * @return 返回为 null意为不需要导航栏
