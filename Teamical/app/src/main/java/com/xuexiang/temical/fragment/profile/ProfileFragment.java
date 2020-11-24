@@ -20,6 +20,7 @@ package com.xuexiang.temical.fragment.profile;
 import com.xuexiang.temical.R;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.fragment.AboutFragment;
+import com.xuexiang.temical.fragment.LoginFragment;
 import com.xuexiang.temical.fragment.SettingsFragment;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
@@ -42,6 +43,8 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     SuperTextView menuSettings;
     @BindView(R.id.menu_about)
     SuperTextView menuAbout;
+    @BindView(R.id.menu_account)
+    SuperTextView menuAccount;
 
     /**
      * @return 返回为 null意为不需要导航栏
@@ -73,6 +76,7 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
     protected void initListeners() {
         menuSettings.setOnSuperTextViewClickListener(this);
         menuAbout.setOnSuperTextViewClickListener(this);
+        menuAccount.setOnSuperTextViewClickListener(this);
 
     }
 
@@ -85,6 +89,9 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
                 break;
             case R.id.menu_about:
                 openNewPage(AboutFragment.class);
+                break;
+            case R.id.menu_account:
+                openNewPage(LoginFragment.class);
                 break;
             default:
                 break;
