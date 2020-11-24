@@ -68,6 +68,27 @@
         <item>跑腿</item>
     </string-array>
 
+    <string-array name="repeat">
+        <item>一次性活动</item>
+        <item>每天</item>
+        <item>周一至周五</item>
+        <item>每周</item>
+        <item>每月</item>
+        <item>每年</item>
+    </string-array>
+
+    <string-array name="remind">
+        <item>开始时</item>
+        <item>提前5分钟</item>
+        <item>提前10分钟</item>
+        <item>提前15分钟</item>
+        <item>提前30分钟</item>
+        <item>提前1小时</item>
+        <item>提前1天</item>
+        <item>提前2天</item>
+        <item>提前1周</item>
+    </string-array>
+
     <!--  修改这里的图标  -->
     <array name="grid_icons_entry">
         <item>@color/app_color_theme_1</item>
