@@ -106,6 +106,9 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation 'com.github.xuexiangjys:RxUtil2:1.1.5'
 
+    // 团队展示需要
+    implementation "com.yuyakaido.android:card-stack-view:2.3.4"
+
     implementation 'com.alibaba.android:vlayout:1.2.36'
     //下拉刷新
     implementation 'com.github.xuexiangjys.SmartRefreshLayout:refresh-header:1.1.5'

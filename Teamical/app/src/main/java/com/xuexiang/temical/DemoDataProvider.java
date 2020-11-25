@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.gson.reflect.TypeToken;
+import com.xuexiang.temical.adapter.entity.TeammateInfo;
 import com.xuexiang.xaop.annotation.MemoryCache;
 import com.xuexiang.xui.adapter.simple.AdapterItem;
 import com.xuexiang.xui.adapter.simple.ExpandableItem;
@@ -128,6 +129,20 @@ public class DemoDataProvider {
                 .setSummary("会议需要穿着正装，并且需要提前进场")
                 .setPraise("14:30 p.m. 16, Nov")
                 .setComment("市中心会议大厅"));
+        return list;
+    }
+
+    /**
+     * 用于模拟团队成员的数据
+     * @return
+     */
+    @MemoryCache
+    public static List<TeammateInfo> getDemoTeammateInfos() {
+        List<TeammateInfo> list = new ArrayList<>();
+        list.add(new TeammateInfo("Andy", "null"));
+        list.add(new TeammateInfo("Lisa", "null"));
+        list.add(new TeammateInfo("James", "null"));
+        list.add(new TeammateInfo("Lucy", "null"));
         return list;
     }
 
