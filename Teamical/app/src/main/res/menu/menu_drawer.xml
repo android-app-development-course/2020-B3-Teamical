@@ -39,13 +39,13 @@
 
         <item
             android:id="@+id/nav_event"
-            android:icon="@drawable/ic_menu_person"
+            android:icon="@drawable/ic_date"
             android:checkable="false"
             android:title="日程" />
 
         <item
             android:id="@+id/nav_statistics"
-            android:icon="@drawable/ic_menu_person"
+            android:icon="@drawable/ic_statistics"
             android:checkable="false"
             android:title="统计" />
 
@@ -60,19 +60,19 @@
         <item
             android:id="@+id/nav_search"
             android:checkable="true"
-            android:icon="@drawable/ic_menu_search"
+            android:icon="@drawable/ic_search"
             android:title="@string/menu_search" />
 
         <item
             android:id="@+id/nav_notifications"
             android:checkable="false"
-            android:icon="@drawable/ic_menu_notifications"
+            android:icon="@drawable/ic_notice"
             android:title="@string/menu_notifications" />
 
         <item
             android:id="@+id/nav_starred"
             android:checkable="false"
-            android:icon="@drawable/ic_menu_star"
+            android:icon="@drawable/ic_star"
             android:title="@string/menu_starred" />
     </group>
 
@@ -82,12 +82,12 @@
         <item
             android:id="@+id/nav_settings"
             android:checkable="false"
-            android:icon="@drawable/ic_menu_settings"
+            android:icon="@drawable/ic_settings"
             android:title="@string/menu_settings" />
         <item
             android:id="@+id/nav_about"
             android:checkable="false"
-            android:icon="@drawable/ic_menu_about"
+            android:icon="@drawable/ic_about"
             android:title="@string/menu_about" />
     </group>
 

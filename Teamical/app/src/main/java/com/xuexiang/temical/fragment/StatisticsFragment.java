@@ -26,7 +26,6 @@ import android.text.style.StyleSpan;
 
 import androidx.appcompat.widget.Toolbar;
 
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.components.Legend;
@@ -75,7 +74,7 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
     PieChart pieChart;
 
     @BindView(R.id.chart2)
-    RadarChart chart;
+    RadarChart radarChart;
 
     protected final String[] parties = new String[]{
             "Party A", "Party B", "Party C", "Party D", "Party E", "Party F", "Party G", "Party H",
@@ -118,42 +117,42 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
         pieChart.setOnChartValueSelectedListener(this);
 
         // 雷达图
-        initChartStyle();
-        initChartLabel();
-        setChartData(5, 80);
+        initRadarChartStyle();
+        initRadarChartLabel();
+        setRadarChartData(5, 80);
 
         // 设置雷达图显示的动画
-        chart.animateXY(1400, 1400);
+        radarChart.animateXY(1400, 1400);
     }
 
     /**
      * 初始化图表的样式
      */
-    protected void initChartStyle() {
+    protected void initRadarChartStyle() {
         // 设置雷达图的背景颜色
-        chart.setBackgroundColor(Color.rgb(60, 65, 82));
+        radarChart.setBackgroundColor(Color.rgb(60, 65, 82));
         // 禁止图表旋转
-        chart.setRotationEnabled(false);
+        radarChart.setRotationEnabled(false);
 
         //设置雷达图网格的样式
-        chart.getDescription().setEnabled(false);
-        chart.setWebLineWidth(1f);
-        chart.setWebColor(Color.LTGRAY);
-        chart.setWebLineWidthInner(1f);
-        chart.setWebColorInner(Color.LTGRAY);
-        chart.setWebAlpha(100);
+        radarChart.getDescription().setEnabled(false);
+        radarChart.setWebLineWidth(1f);
+        radarChart.setWebColor(Color.LTGRAY);
+        radarChart.setWebLineWidthInner(1f);
+        radarChart.setWebColorInner(Color.LTGRAY);
+        radarChart.setWebAlpha(100);
 
         // 设置标识雷达图上各点的数字控件
         MarkerView mv = new RadarMarkerView(getContext(), R.layout.marker_view_radar);
-        mv.setChartView(chart);
-        chart.setMarker(mv);
+        mv.setChartView(radarChart);
+        radarChart.setMarker(mv);
 
         initXYAxisStyle();
     }
 
     private void initXYAxisStyle() {
         //设置X轴（雷达图的项目点）的样式
-        XAxis xAxis = chart.getXAxis();
+        XAxis xAxis = radarChart.getXAxis();
         xAxis.setTextSize(9f);
         xAxis.setYOffset(0f);
         xAxis.setXOffset(0f);
@@ -167,7 +166,7 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
         xAxis.setTextColor(Color.WHITE);
 
         //设置Y轴（雷达图的分值）的样式
-        YAxis yAxis = chart.getYAxis();
+        YAxis yAxis = radarChart.getYAxis();
         yAxis.setLabelCount(5, false);
         yAxis.setTextSize(9f);
         //最小分值
@@ -181,9 +180,9 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
     /**
      * 初始化图表的 标题 样式
      */
-    protected void initChartLabel() {
+    protected void initRadarChartLabel() {
         //设置图表数据 标题 的样式
-        Legend l = chart.getLegend();
+        Legend l = radarChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
         l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
@@ -199,7 +198,7 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
      * @param count 一组数据的数量
      * @param range
      */
-    protected void setChartData(int count, float range) {
+    protected void setRadarChartData(int count, float range) {
         float min = 20;
 
         ArrayList<RadarEntry> entries1 = new ArrayList<>();
@@ -242,8 +241,8 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
         data.setDrawValues(false);
         data.setValueTextColor(Color.WHITE);
 
-        chart.setData(data);
-        chart.invalidate();
+        radarChart.setData(data);
+        radarChart.invalidate();
     }
 
     private void showBottomSheetList() {
@@ -258,27 +257,27 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
                     dialog.dismiss();
                     switch (position) {
                         case 0:
-                            for (IDataSet<?> set : chart.getData().getDataSets()) {
+                            for (IDataSet<?> set : radarChart.getData().getDataSets()) {
                                 set.setDrawValues(!set.isDrawValuesEnabled());
                             }
-                            chart.invalidate();
+                            radarChart.invalidate();
                             break;
                         case 1:
-                            chart.getXAxis().setEnabled(!chart.getXAxis().isEnabled());
-                            chart.invalidate();
+                            radarChart.getXAxis().setEnabled(!radarChart.getXAxis().isEnabled());
+                            radarChart.invalidate();
                             break;
                         case 2:
-                            chart.getYAxis().setEnabled(!chart.getYAxis().isEnabled());
-                            chart.invalidate();
+                            radarChart.getYAxis().setEnabled(!radarChart.getYAxis().isEnabled());
+                            radarChart.invalidate();
                             break;
                         case 3:
-                            chart.animateX(1400);
+                            radarChart.animateX(1400);
                             break;
                         case 4:
-                            chart.animateY(1400);
+                            radarChart.animateY(1400);
                             break;
                         case 5:
-                            chart.animateXY(1400, 1400);
+                            radarChart.animateXY(1400, 1400);
                             break;
                         default:
                             break;
@@ -414,13 +413,14 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
      * @return
      */
     private SpannableString generateCenterSpannableText() {
-        SpannableString s = new SpannableString("MPAndroidChart\ndeveloped by Philipp Jahoda");
-        s.setSpan(new RelativeSizeSpan(1.7f), 0, 14, 0);
-        s.setSpan(new StyleSpan(Typeface.NORMAL), 14, s.length() - 15, 0);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
-        s.setSpan(new RelativeSizeSpan(.8f), 14, s.length() - 15, 0);
-        s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - 14, s.length(), 0);
-        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - 14, s.length(), 0);
+        SpannableString s = new SpannableString("teamical user \ndata");
+//        SpannableString s = new SpannableString("MPAndroidChart\ndeveloped by Philipp Jahoda");
+        s.setSpan(new RelativeSizeSpan(1.5f), 0, 14, 0);
+//        s.setSpan(new StyleSpan(Typeface.NORMAL), 14, s.length() - 15, 0);
+//        s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
+//        s.setSpan(new RelativeSizeSpan(.8f), 14, s.length() - 15, 0);
+//        s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - 14, s.length(), 0);
+//        s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - 14, s.length(), 0);
         return s;
     }
 }
