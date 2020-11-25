@@ -260,6 +260,6 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
      */
     protected void simpleAdd() {
         XToastUtils.toast("普通添加日程");
-        // Todo: 跳转界面 2020/11/25
+        openNewPage(NewEventFragment.class);
     }
 }

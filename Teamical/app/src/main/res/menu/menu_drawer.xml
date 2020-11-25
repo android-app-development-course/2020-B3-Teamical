@@ -24,7 +24,7 @@
 
         <item
             android:id="@+id/nav_news"
-            android:icon="@drawable/ic_detail"
+            android:icon="@drawable/ic_date"
             android:title="@string/menu_news" />
 
         <item
@@ -36,12 +36,6 @@
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_atm"
             android:title="@string/menu_profile" />
-
-        <item
-            android:id="@+id/nav_event"
-            android:icon="@drawable/ic_date"
-            android:checkable="false"
-            android:title="日程" />
 
         <item
             android:id="@+id/nav_statistics"

@@ -41,6 +41,7 @@ import com.xuexiang.temical.fragment.ComplexCalendarFragment;
 import com.xuexiang.temical.fragment.NewEventFragment;
 import com.xuexiang.temical.fragment.SettingsFragment;
 import com.xuexiang.temical.fragment.StatisticsFragment;
+import com.xuexiang.temical.fragment.TeamManagerFragment;
 import com.xuexiang.temical.fragment.profile.ProfileFragment;
 import com.xuexiang.temical.fragment.TeamFragment;
 import com.xuexiang.temical.utils.Utils;
@@ -166,12 +167,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                     case R.id.nav_about:
                         openNewPage(AboutFragment.class);
                         break;
-                    case R.id.nav_event:
-                        XToastUtils.toast("点击了:" + menuItem.getTitle());
-                        openNewPage(NewEventFragment.class);
-                        break;
                     case R.id.nav_statistics:
                         openNewPage(StatisticsFragment.class);
+                        break;
+                    case R.id.nav_search:
+                        // Todo: 拿来试验试验,到时记得删掉
+                        openNewPage(TeamManagerFragment.class);
                         break;
                     default:
                         XToastUtils.toast("点击了:" + menuItem.getTitle());
