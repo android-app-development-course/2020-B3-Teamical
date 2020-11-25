@@ -62,7 +62,6 @@ public class NewsCardViewListAdapter extends BaseRecyclerAdapter<NewInfo> {
             switch (key) {
                 case DiffUtilCallback.PAYLOAD_USER_NAME:
                     //这里可以用payload里的数据，不过newInfo也是新的 也可以用
-                    holder.text(R.id.tv_user_name, newInfo.getUserName());
                     break;
                 case DiffUtilCallback.PAYLOAD_PRAISE:
 //                    holder.text(R.id.tv_praise, payload.getInt(DiffUtilCallback.PAYLOAD_PRAISE) == 0 ? "点赞" : String.valueOf(payload.getInt(DiffUtilCallback.PAYLOAD_PRAISE)));

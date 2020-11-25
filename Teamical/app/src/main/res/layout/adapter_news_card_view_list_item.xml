@@ -48,29 +48,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.xuexiang.xui.widget.imageview.RadiusImageView
-                    android:id="@+id/iv_avatar"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@mipmap/ic_launcher"
-                    app:riv_is_circle="true" />
-
-                <TextView
-                    android:id="@+id/tv_user_name"
-                    style="@style/TextStyle.Explain"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginStart="4dp"
-                    android:textColor="@color/xui_config_color_pure_black"
-                    tools:text="schedule" />
-            </LinearLayout>
+                android:orientation="horizontal"/>
 
             <TextView
                 android:id="@+id/tv_tag"
                 style="@style/TextStyle.Explain"
                 android:layout_gravity="end|center_vertical"
                 tools:text="Java" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                style="@style/TextStyle.Content"
+                android:ellipsize="end"
+                android:gravity="start|center_vertical"
+                android:maxLines="2"
+                android:singleLine="false"
+                android:textColor="@color/xui_config_color_pure_black"
+                tools:text="光明公司宣讲会" />
 
         </FrameLayout>
 
@@ -87,20 +81,9 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_title"
-                    style="@style/TextStyle.Content"
-                    android:ellipsize="end"
-                    android:gravity="start|center_vertical"
-                    android:maxLines="2"
-                    android:singleLine="false"
-                    android:textColor="@color/xui_config_color_pure_black"
-                    tools:text="光明公司宣讲会" />
-
-                <TextView
                     android:id="@+id/tv_summary"
                     style="@style/TextStyle.Explain"
                     android:layout_marginTop="3dp"
-                    android:layout_marginStart="15dp"
                     android:ellipsize="end"
                     android:gravity="start|center_vertical"
                     android:maxLines="2"
@@ -137,7 +120,6 @@
                     android:id="@+id/iv_praise"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:layout_marginStart="15dp"
                     app:srcCompat="@drawable/ic_time" />
 
                 <TextView
@@ -158,7 +140,6 @@
                     android:id="@+id/iv_comment"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:layout_marginStart="15dp"
                     app:srcCompat="@drawable/ic_place" />
 
                 <TextView

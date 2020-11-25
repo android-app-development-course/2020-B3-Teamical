@@ -156,7 +156,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         //侧边栏点击事件
         navView.setNavigationItemSelectedListener(menuItem -> {
-            XToastUtils.toast("!!!" + menuItem.getTitle());
             if (menuItem.isCheckable()) {
                 drawerLayout.closeDrawers();
                 return handleNavigationItemSelected(menuItem);

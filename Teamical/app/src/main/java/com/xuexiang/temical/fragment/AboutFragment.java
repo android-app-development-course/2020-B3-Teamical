@@ -17,12 +17,14 @@
 
 package com.xuexiang.temical.fragment;
 
+import android.graphics.Color;
 import android.widget.TextView;
 
 import com.xuexiang.temical.R;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.core.webview.AgentWebActivity;
 import com.xuexiang.xpage.annotation.Page;
+import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.grouplist.XUIGroupListView;
 import com.xuexiang.xutil.app.AppUtils;
 
@@ -49,6 +51,14 @@ public class AboutFragment extends BaseFragment {
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_about;
+    }
+
+    @Override
+    protected TitleBar initTitle() {
+        TitleBar titleBar = super.initTitle()
+                .setImmersive(true);
+        titleBar.setBackgroundColor(Color.TRANSPARENT);
+        return titleBar;
     }
 
     @Override

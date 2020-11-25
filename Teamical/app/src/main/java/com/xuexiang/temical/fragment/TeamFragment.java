@@ -23,9 +23,12 @@ import com.xuexiang.temical.R;
 import com.xuexiang.temical.adapter.CardStackAdapter;
 import com.xuexiang.temical.adapter.entity.Spot;
 import com.xuexiang.temical.core.BaseFragment;
+import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
+import com.xuexiang.xui.widget.dialog.DialogLoader;
+import com.xuexiang.xui.widget.shadow.ShadowButton;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -46,16 +49,9 @@ import butterknife.BindView;
 public class TeamFragment extends BaseFragment implements CardStackListener {
     private List<Spot> createSpots() {
         List<Spot> spots = new ArrayList<>();
-        spots.add(new Spot("Yasaka Shrine", "Kyoto", "https://source.unsplash.com/Xq1ntWruZQI/600x800"));
-        spots.add(new Spot("Fushimi Inari Shrine", "Kyoto", "https://source.unsplash.com/NYyCqdBOKwc/600x800"));
-        spots.add(new Spot("Bamboo Forest", "Kyoto", "https://source.unsplash.com/buF62ewDLcQ/600x800"));
-        spots.add(new Spot("Brooklyn Bridge", "New York", "https://source.unsplash.com/THozNzxEP3g/600x800"));
-        spots.add(new Spot("Empire State Building", "New York", "https://source.unsplash.com/USrZRcRS2Lw/600x800"));
-        spots.add(new Spot("The statue of Liberty", "New York", "https://source.unsplash.com/PeFk7fzxTdk/600x800"));
-        spots.add(new Spot("Louvre Museum", "Paris", "https://source.unsplash.com/LrMWHKqilUw/600x800"));
-        spots.add(new Spot("Eiffel Tower", "Paris", "https://source.unsplash.com/HN-5Z6AmxrM/600x800"));
-        spots.add(new Spot("Big Ben", "London", "https://source.unsplash.com/CdVAUADdqEc/600x800"));
-        spots.add(new Spot("Great Wall of China", "China", "https://source.unsplash.com/AWh9C-QjhE4/600x800"));
+        spots.add(new Spot("测试团队1", "团队人数:3", "https://source.unsplash.com/Xq1ntWruZQI/600x800"));
+        spots.add(new Spot("测试团队2", "团队人数:4", "https://source.unsplash.com/NYyCqdBOKwc/600x800"));
+        spots.add(new Spot("测试团队3", "团队人数:10", "https://source.unsplash.com/buF62ewDLcQ/600x800"));
         return spots;
     }
 
@@ -64,6 +60,12 @@ public class TeamFragment extends BaseFragment implements CardStackListener {
     private CardStackAdapter adapter;
     @BindView(R.id.card_stack_view)
     CardStackView cardStackView;
+    @BindView(R.id.manage_member)
+    ShadowButton manage_member;
+    @BindView(R.id.leave_team)
+    ShadowButton leave_team;
+    @BindView(R.id.handel_application)
+    ShadowButton handle_application;
 
 
     /**
@@ -103,6 +105,29 @@ public class TeamFragment extends BaseFragment implements CardStackListener {
         cardStackView = findViewById(R.id.card_stack_view);
         cardStackView.setLayoutManager(manager);
         cardStackView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void initListeners() {
+        super.initListeners();
+        manage_member.setOnClickListener(view -> openNewPage(TeamManagerFragment.class));
+        handle_application.setOnClickListener(view -> openNewPage(TeamApplyMessageListFragment.class));
+        leave_team.setOnClickListener(view -> {
+            DialogLoader.getInstance().showConfirmDialog(
+                    getContext(),
+                    "确认退出？",
+                    getString(R.string.lab_yes),
+                    (dialog, which) -> {
+                        XToastUtils.toast("退出成功");
+                        dialog.dismiss();
+                    },
+                    getString(R.string.lab_no),
+                    (dialog, which) -> {
+                        XToastUtils.toast("取消退出");
+                        dialog.dismiss();
+                    }
+            );
+        });
     }
 
     @Override

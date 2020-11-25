@@ -77,10 +77,7 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
     RadarChart radarChart;
 
     protected final String[] parties = new String[]{
-            "Party A", "Party B", "Party C", "Party D", "Party E", "Party F", "Party G", "Party H",
-            "Party I", "Party J", "Party K", "Party L", "Party M", "Party N", "Party O", "Party P",
-            "Party Q", "Party R", "Party S", "Party T", "Party U", "Party V", "Party W", "Party X",
-            "Party Y", "Party Z"
+            "工作", "学习", "娱乐", "健身",
     };
 
     @Override
@@ -213,7 +210,7 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
         }
 
         //设置两组数据的表现样式
-        RadarDataSet set1 = new RadarDataSet(entries1, "Last Week");
+        RadarDataSet set1 = new RadarDataSet(entries1, "上星期");
         set1.setColor(Color.rgb(103, 110, 129));
         set1.setFillColor(Color.rgb(103, 110, 129));
         set1.setDrawFilled(true);
@@ -222,7 +219,7 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
         set1.setDrawHighlightCircleEnabled(true);
         set1.setDrawHighlightIndicators(false);
 
-        RadarDataSet set2 = new RadarDataSet(entries2, "This Week");
+        RadarDataSet set2 = new RadarDataSet(entries2, "本星期");
         set2.setColor(Color.rgb(121, 162, 175));
         set2.setFillColor(Color.rgb(121, 162, 175));
         set2.setDrawFilled(true);
@@ -413,9 +410,9 @@ public class StatisticsFragment extends BaseFragment implements OnChartValueSele
      * @return
      */
     private SpannableString generateCenterSpannableText() {
-        SpannableString s = new SpannableString("teamical user \ndata");
+        SpannableString s = new SpannableString("时间统计");
 //        SpannableString s = new SpannableString("MPAndroidChart\ndeveloped by Philipp Jahoda");
-        s.setSpan(new RelativeSizeSpan(1.5f), 0, 14, 0);
+        s.setSpan(new RelativeSizeSpan(1.5f), 0, 3, 0);
 //        s.setSpan(new StyleSpan(Typeface.NORMAL), 14, s.length() - 15, 0);
 //        s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
 //        s.setSpan(new RelativeSizeSpan(.8f), 14, s.length() - 15, 0);

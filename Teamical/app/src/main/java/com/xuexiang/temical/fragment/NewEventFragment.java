@@ -1,5 +1,6 @@
 package com.xuexiang.temical.fragment;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -60,10 +61,11 @@ public class NewEventFragment extends BaseFragment {
 
     }
 
+
     @Override
     protected TitleBar initTitle() {
         TitleBar titleBar = super.initTitle();
-        //titleBar.setBackgroundColor(Color.TRANSPARENT);
+        titleBar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         titleBar.setTitle("新建日程");
         titleBar.setHeight(200);
 

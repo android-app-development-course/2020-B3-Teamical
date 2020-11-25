@@ -138,7 +138,6 @@ public class NewsFragment extends BaseFragment {
             @Override
             protected void bindData(@NonNull RecyclerViewHolder holder, int position, NewInfo model) {
                 if (model != null) {
-                    holder.text(R.id.tv_user_name, model.getUserName());
                     holder.text(R.id.tv_tag, model.getTag());
                     holder.text(R.id.tv_title, model.getTitle());
                     holder.text(R.id.tv_summary, model.getSummary());

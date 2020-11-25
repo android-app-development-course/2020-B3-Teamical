@@ -17,12 +17,16 @@
 
 package com.xuexiang.temical.fragment;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+
 import com.xuexiang.temical.R;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.TokenUtils;
 import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
+import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
 import com.xuexiang.xutil.XUtil;
@@ -62,6 +66,15 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
         menuHelper.setOnSuperTextViewClickListener(this);
         menuChangeAccount.setOnSuperTextViewClickListener(this);
         menuLogout.setOnSuperTextViewClickListener(this);
+    }
+
+    @SuppressLint("ResourceAsColor")
+    @Override
+    protected TitleBar initTitle() {
+        TitleBar titleBar = super.initTitle()
+                .setImmersive(true);
+        titleBar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        return titleBar;
     }
 
     @SingleClick
