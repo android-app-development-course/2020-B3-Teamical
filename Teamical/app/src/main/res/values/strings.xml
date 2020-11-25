@@ -70,4 +70,10 @@
     <string name="title_jump_login">跳过</string>
     <string name="team">团队</string>
 
+    <string name="chart_toggle_values">显示/隐藏图表值</string>
+    <string name="chart_toggle_x_values">显示/隐藏X轴</string>
+    <string name="chart_toggle_y_values">显示/隐藏Y轴</string>
+    <string name="chart_animate_x">X轴动画</string>
+    <string name="chart_animate_y">Y轴动画</string>
+    <string name="chart_animate_xy">XY轴动画</string>
 </resources>

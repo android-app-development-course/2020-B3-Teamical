@@ -40,11 +40,11 @@ public class NewInfo implements Cloneable {
     /**
      * 点赞数
      */
-    private int Praise;
+    private String Praise;
     /**
      * 评论数
      */
-    private int Comment;
+    private String Comment;
     /**
      * 阅读量
      */
@@ -59,7 +59,7 @@ public class NewInfo implements Cloneable {
 
     }
 
-    public NewInfo(String userName, String tag, String title, String summary, String imageUrl, int praise, int comment, int read, String detailUrl) {
+    public NewInfo(String userName, String tag, String title, String summary, String imageUrl, String praise, String comment, int read, String detailUrl) {
         UserName = userName;
         Tag = tag;
         Title = title;
@@ -86,14 +86,14 @@ public class NewInfo implements Cloneable {
         Tag = tag;
         Title = title;
 
-        Praise = (int) (Math.random() * 100 + 5);
-        Comment = (int) (Math.random() * 50 + 5);
+        Praise = String.valueOf(Math.random() * 100 + 5);
+        Comment = String.valueOf(Math.random() * 50 + 5);
         Read = (int) (Math.random() * 500 + 50);
     }
 
     public NewInfo resetContent() {
-        Praise = (int) (Math.random() * 100 + 5);
-        Comment = (int) (Math.random() * 50 + 5);
+        Praise = String.valueOf(Math.random() * 100 + 5);
+        Comment = String.valueOf(Math.random() * 50 + 5);
         Read = (int) (Math.random() * 500 + 50);
         return this;
     }
@@ -152,20 +152,20 @@ public class NewInfo implements Cloneable {
         return this;
     }
 
-    public int getPraise() {
+    public String getPraise() {
         return Praise;
     }
 
-    public NewInfo setPraise(int praise) {
+    public NewInfo setPraise(String praise) {
         Praise = praise;
         return this;
     }
 
-    public int getComment() {
+    public String getComment() {
         return Comment;
     }
 
-    public NewInfo setComment(int comment) {
+    public NewInfo setComment(String comment) {
         Comment = comment;
         return this;
     }

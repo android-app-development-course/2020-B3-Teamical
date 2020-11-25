@@ -125,10 +125,10 @@ public class DiffUtilCallback extends DiffUtil.Callback {
             payload.putString(PAYLOAD_USER_NAME, newInfo.getUserName());
         }
         if (oldInfo.getPraise() != newInfo.getPraise()) {
-            payload.putInt(PAYLOAD_PRAISE, newInfo.getPraise());
+            payload.putString(PAYLOAD_PRAISE, newInfo.getPraise());
         }
         if (oldInfo.getComment() != newInfo.getComment()) {
-            payload.putInt(PAYLOAD_COMMENT, newInfo.getComment());
+            payload.putString(PAYLOAD_COMMENT, newInfo.getComment());
         }
         if (oldInfo.getRead() != newInfo.getRead()) {
             payload.putInt(PAYLOAD_READ_NUMBER, newInfo.getRead());
