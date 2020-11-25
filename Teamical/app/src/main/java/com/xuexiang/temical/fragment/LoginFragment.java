@@ -21,6 +21,7 @@ import android.graphics.Color;
 import android.view.View;
 
 import com.xuexiang.temical.R;
+import com.xuexiang.rxutil2.rxjava.RxJavaUtils;
 import com.xuexiang.temical.activity.MainActivity;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.RandomUtils;
@@ -34,8 +35,10 @@ import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.utils.CountDownButtonHelper;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
+import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.button.roundbutton.RoundButton;
+import com.xuexiang.xui.widget.dialog.LoadingDialog;
 import com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText;
 import com.xuexiang.xutil.app.ActivityUtils;
 
@@ -58,6 +61,9 @@ public class LoginFragment extends BaseFragment {
     MaterialEditText etVerifyCode;
     @BindView(R.id.btn_get_verify_code)
     RoundButton btnGetVerifyCode;
+
+    // 弹出进度框
+    LoadingDialog mLoadingDialog;
 
     private CountDownButtonHelper mCountDownHelper;
 
@@ -95,6 +101,11 @@ public class LoginFragment extends BaseFragment {
                 SettingUtils.setIsAgreePrivacy(true);
             });
         }
+
+        // 对话框
+        mLoadingDialog = WidgetUtils.getLoadingDialog(getContext())
+                .setIconScale(0.4F)
+                .setLoadingSpeed(8);
     }
 
     @SingleClick
@@ -147,7 +158,11 @@ public class LoginFragment extends BaseFragment {
      */
     private void loginByVerifyCode(String phoneNumber, String verifyCode) {
         // TODO: 2020/8/29 这里只是界面演示而已
-        onLoginSuccess();
+        mLoadingDialog.show();
+        RxJavaUtils.delay(2, aLong -> {
+            mLoadingDialog.dismiss();
+            onLoginSuccess();
+        });
     }
 
     /**

@@ -97,6 +97,15 @@ dependencies {
     //分包
     implementation deps.androidx.multidex
 
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    //rxbinding的sdk
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+
+    // 图表所需的依赖
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.github.xuexiangjys:RxUtil2:1.1.5'
+
     implementation 'com.alibaba.android:vlayout:1.2.36'
     //下拉刷新
     implementation 'com.github.xuexiangjys.SmartRefreshLayout:refresh-header:1.1.5'

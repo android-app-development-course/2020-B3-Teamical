@@ -94,18 +94,19 @@
                     android:maxLines="2"
                     android:singleLine="false"
                     android:textColor="@color/xui_config_color_pure_black"
-                    tools:text="深度解析RocketMQ消息发送的高可用设计" />
+                    tools:text="光明公司宣讲会" />
 
                 <TextView
                     android:id="@+id/tv_summary"
                     style="@style/TextStyle.Explain"
                     android:layout_marginTop="3dp"
+                    android:layout_marginStart="15dp"
                     android:ellipsize="end"
                     android:gravity="start|center_vertical"
                     android:maxLines="2"
                     android:singleLine="false"
                     android:textColor="?attr/xui_config_color_content_text"
-                    tools:text="从rocketmq topic的创建机制可知，一个topic对应有多个消息队列，那么我们在发送消息时，是如何选择消息队列进行发送的？" />
+                    tools:text="会议需要穿着正装，并且需要提前进场" />
 
             </LinearLayout>
 
@@ -132,40 +133,48 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-<!--                <androidx.appcompat.widget.AppCompatImageView-->
-<!--                    android:id="@+id/iv_praise"-->
-<!--                    android:layout_width="16dp"-->
-<!--                    android:layout_height="16dp"-->
-<!--                    android:src="@drawable/ic_praise" />-->
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_praise"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="15dp"
+                    app:srcCompat="@drawable/ic_time" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_praise"-->
-<!--                    style="@style/TextStyle.Explain"-->
-<!--                    android:layout_marginStart="5dp"-->
-<!--                    tools:text="点赞" />-->
+                <TextView
+                    android:id="@+id/tv_praise"
+                    style="@style/TextStyle.Explain"
+                    android:layout_marginStart="5dp"
+                    tools:text="9:40 20,Aug" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-<!--                <androidx.appcompat.widget.AppCompatImageView-->
-<!--                    android:id="@+id/iv_comment"-->
-<!--                    android:layout_width="16dp"-->
-<!--                    android:layout_height="16dp"-->
-<!--                    android:layout_marginStart="30dp"-->
-<!--                    android:src="@drawable/ic_comment" />-->
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_comment"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="15dp"
+                    app:srcCompat="@drawable/ic_place" />
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_comment"-->
-<!--                    style="@style/TextStyle.Explain"-->
-<!--                    android:layout_marginStart="5dp"-->
-<!--                    tools:text="评论" />-->
+                <TextView
+                    android:id="@+id/tv_comment"
+                    style="@style/TextStyle.Explain"
+                    android:layout_marginStart="5dp"
+                    tools:text="华信路礼堂" />
 
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_read"
-                style="@style/TextStyle.Explain"
-                android:layout_gravity="center_vertical|end"
-                tools:text="阅读量 123" />
+<!--            <TextView-->
+<!--                android:id="@+id/tv_read"-->
+<!--                style="@style/TextStyle.Explain"-->
+<!--                android:layout_gravity="center_vertical|end"-->
+<!--                tools:text="阅读量 123" />-->
 
         </FrameLayout>
 

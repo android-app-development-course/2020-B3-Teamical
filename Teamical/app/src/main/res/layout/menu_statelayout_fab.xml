@@ -19,13 +19,13 @@
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab_quick_add"
         style="@style/FabMenu.Buttons"
-        android:src="@drawable/ic_fab_content"
+        android:src="@drawable/ic_quick_text"
         app:fab_label="快捷添加"/>
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/fab_simple_add"
         style="@style/FabMenu.Buttons"
-        android:src="@drawable/ic_fab_empty"
+        android:src="@drawable/ic_simply_text"
         app:fab_label="普通添加"/>
 
 </com.github.clans.fab.FloatingActionMenu>

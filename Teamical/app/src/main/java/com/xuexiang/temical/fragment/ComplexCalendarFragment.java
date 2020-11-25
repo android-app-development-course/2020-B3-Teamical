@@ -20,6 +20,7 @@ package com.xuexiang.temical.fragment;
 import android.view.View;
 import android.widget.TextView;
 
+import com.xuexiang.rxutil2.rxjava.RxJavaUtils;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -29,18 +30,23 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
+import com.xuexiang.temical.adapter.entity.NewInfo;
 import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xui.adapter.recyclerview.XLinearLayoutManager;
+import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.temical.DemoDataProvider;
 import com.xuexiang.temical.R;
 import com.xuexiang.temical.adapter.NewsCardViewListAdapter;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.Utils;
+import com.xuexiang.xui.widget.dialog.LoadingDialog;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -73,11 +79,15 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
     @BindView(R.id.fab_menu)
     FloatingActionMenu mFloatingActionMenu;
 
+    // 弹出进度框
+    LoadingDialog mLoadingDialog;
 
 //    @BindView(R.id.fab_recycler_view)
 //    FloatingActionButton fab;
 
     private int mYear;
+    private List<NewInfo> itemList = new ArrayList<>();
+    private NewsCardViewListAdapter mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -102,16 +112,22 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
 
         initRecyclerView();
 
+        // 对话框
+        mLoadingDialog = WidgetUtils.getLoadingDialog(getContext())
+                .setIconScale(0.4F)
+                .setLoadingSpeed(8);
     }
 
     private void initRecyclerView() {
         recyclerView.setLayoutManager(new XLinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        NewsCardViewListAdapter mAdapter;
         recyclerView.setAdapter(mAdapter = new NewsCardViewListAdapter());
-        mAdapter.refresh(DemoDataProvider.getDemoNewInfos());
-        mAdapter.setOnItemClickListener((itemView, item, position) -> Utils.goWeb(getContext(), item.getDetailUrl()));
+        // 生成一些demo数据
+        itemList = DemoDataProvider.getDemoNewInfos();
+        mAdapter.refresh(itemList);
+        // 监听点击事件
+//        mAdapter.setOnItemClickListener((itemView, item, position) -> Utils.goWeb(getContext(), item.getDetailUrl()));
     }
 
     @Override
@@ -224,7 +240,19 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
      * 快速添加
      */
     protected void quickAdd() {
-        XToastUtils.toast("快速添加日程");
+//        XToastUtils.toast("快速添加日程");
+        mLoadingDialog.show();
+        RxJavaUtils.delay(2, aLong -> {
+            mLoadingDialog.dismiss();
+            XToastUtils.success("添加成功");
+        });
+
+        // 添加一个示例进来
+        itemList.add(new NewInfo("个人日程", "青阳公司场品发布会")
+                .setSummary("会议初始身份证件，并且全程手机保持静音。")
+                .setPraise("20:00 p.m. 20 Nov")
+                .setComment("华融大厦五楼会议大厅"));
+        mAdapter.refresh(itemList);
     }
 
     /**
@@ -232,5 +260,6 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
      */
     protected void simpleAdd() {
         XToastUtils.toast("普通添加日程");
+        // Todo: 跳转界面 2020/11/25
     }
 }

@@ -110,24 +110,24 @@ public class DemoDataProvider {
     public static List<NewInfo> getDemoNewInfos() {
         List<NewInfo> list = new ArrayList<>();
         list.add(new NewInfo("个人日程", "光明公司宣讲会")
-                .setSummary("时间: 13:00 p.m. 15, Nov\n地点: 华信路礼堂")
-                .setDetailUrl("https://cn.bing.com/")
-                .setImageUrl("src/main/res/drawable/todo.png"));
+                .setSummary("会议需要穿着正装，并且需要提前进场")
+                .setPraise("9:40 p.m. 15")
+                .setComment("华信路礼堂"));
 
         list.add(new NewInfo("团队日程", "公司团建活动")
-                .setSummary("时间: 19:00 p.m. 15, Nov\n地点: 公司活动中心")
-                .setDetailUrl("https://cn.bing.com/")
-                .setImageUrl("https://tse1-mm.cn.bing.net/th/id/OIP.w7kEi8o69d7oTljHEpsRRgHaHa?w=186&h=186&c=7&o=5&dpr=1.25&pid=1.7"));
+                .setSummary("会议需要穿着正装，并且需要提前进场")
+                .setPraise("19:00 p.m. 15")
+                .setComment("公司活动中心"));
 
         list.add(new NewInfo("个人日程", "光明公司管理层会议")
-                .setSummary("时间: 9:00 p.m. 16, Nov\n地点: 会议508")
-                .setDetailUrl("https://cn.bing.com/")
-                .setImageUrl("https://tse1-mm.cn.bing.net/th/id/OIP.w7kEi8o69d7oTljHEpsRRgHaHa?w=186&h=186&c=7&o=5&dpr=1.25&pid=1.7"));
+                .setSummary("会议需要穿着正装，并且需要提前进场")
+                .setPraise("9:00 p.m. 16, Nov")
+                .setComment("会议508"));
 
         list.add(new NewInfo("个人日程", "日程管理软件项目投标会")
-                .setSummary("时间: 14:30 p.m. 16, Nov\n地点: 市中心会议大厅")
-                .setDetailUrl("https://cn.bing.com/")
-                .setImageUrl("https://tse1-mm.cn.bing.net/th/id/OIP.w7kEi8o69d7oTljHEpsRRgHaHa?w=186&h=186&c=7&o=5&dpr=1.25&pid=1.7"));
+                .setSummary("会议需要穿着正装，并且需要提前进场")
+                .setPraise("14:30 p.m. 16, Nov")
+                .setComment("市中心会议大厅"));
         return list;
     }
 
