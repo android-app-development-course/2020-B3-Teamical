@@ -76,4 +76,7 @@
     <string name="chart_animate_x">X轴动画</string>
     <string name="chart_animate_y">Y轴动画</string>
     <string name="chart_animate_xy">XY轴动画</string>
+    <string name="team_main_create">我管理的</string>
+    <string name="team_main_join">我加入的</string>
+    <string name="add_a_team">创建新团队</string>
 </resources>

@@ -127,7 +127,7 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
         itemList = DemoDataProvider.getDemoNewInfos();
         mAdapter.refresh(itemList);
         // 监听点击事件
-//        mAdapter.setOnItemClickListener((itemView, item, position) -> Utils.goWeb(getContext(), item.getDetailUrl()));
+        mAdapter.setOnItemClickListener((itemView, item, position) -> Utils.goWeb(getContext(), item.getDetailUrl()));
     }
 
     @Override

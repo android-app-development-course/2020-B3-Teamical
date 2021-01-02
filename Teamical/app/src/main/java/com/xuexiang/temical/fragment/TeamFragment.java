@@ -19,22 +19,34 @@ package com.xuexiang.temical.fragment;
 
 import android.view.View;
 
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.xuexiang.temical.DemoDataProvider;
 import com.xuexiang.temical.R;
 import com.xuexiang.temical.adapter.CardStackAdapter;
+import com.xuexiang.temical.adapter.NewsCardViewListAdapter;
+import com.xuexiang.temical.adapter.TeamCreateAdapter;
+import com.xuexiang.temical.adapter.TeamJoinAdapter;
+import com.xuexiang.temical.adapter.entity.NewInfo;
 import com.xuexiang.temical.adapter.entity.Spot;
+import com.xuexiang.temical.adapter.entity.TeamCreate;
+import com.xuexiang.temical.adapter.entity.TeamJoin;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
+import com.xuexiang.xui.adapter.recyclerview.XLinearLayoutManager;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
 import com.xuexiang.xui.widget.shadow.ShadowButton;
-import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
-import com.yuyakaido.android.cardstackview.CardStackListener;
-import com.yuyakaido.android.cardstackview.CardStackView;
-import com.yuyakaido.android.cardstackview.Direction;
-import com.yuyakaido.android.cardstackview.StackFrom;
-import com.yuyakaido.android.cardstackview.SwipeableMethod;
+//import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
+//import com.yuyakaido.android.cardstackview.CardStackListener;
+//import com.yuyakaido.android.cardstackview.CardStackView;
+//import com.yuyakaido.android.cardstackview.Direction;
+//import com.yuyakaido.android.cardstackview.StackFrom;
+//import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,27 +58,22 @@ import butterknife.BindView;
  * @since 2019-10-30 00:19
  */
 @Page(anim = CoreAnim.none)
-public class TeamFragment extends BaseFragment implements CardStackListener {
-    private List<Spot> createSpots() {
-        List<Spot> spots = new ArrayList<>();
-        spots.add(new Spot("测试团队1", "团队人数:3", "https://source.unsplash.com/Xq1ntWruZQI/600x800"));
-        spots.add(new Spot("测试团队2", "团队人数:4", "https://source.unsplash.com/NYyCqdBOKwc/600x800"));
-        spots.add(new Spot("测试团队3", "团队人数:10", "https://source.unsplash.com/buF62ewDLcQ/600x800"));
-        return spots;
-    }
+public class TeamFragment extends BaseFragment {
 
+    @BindView(R.id.team_create_recyclerView)
+    RecyclerView teamCreateRecyclerView;
 
-    private CardStackLayoutManager manager;
-    private CardStackAdapter adapter;
-    @BindView(R.id.card_stack_view)
-    CardStackView cardStackView;
-    @BindView(R.id.manage_member)
-    ShadowButton manage_member;
-    @BindView(R.id.leave_team)
-    ShadowButton leave_team;
-    @BindView(R.id.handel_application)
-    ShadowButton handle_application;
+    @BindView(R.id.team_join_recyclerView)
+    RecyclerView teamJoinRecyclerView;
 
+    @BindView(R.id.new_a_team)
+    CardView cardview;
+
+    private List<TeamCreate> itemList = new ArrayList<>();
+    private TeamCreateAdapter mAdapter;
+
+    private List<TeamJoin> joinList = new ArrayList<>();
+    private TeamJoinAdapter  joinAdapter;
 
     /**
      * @return 返回为 null意为不需要导航栏
@@ -91,72 +98,72 @@ public class TeamFragment extends BaseFragment implements CardStackListener {
      */
     @Override
     protected void initViews() {
-        manager = new CardStackLayoutManager(this.getActivity(), this);
-        manager.setStackFrom(StackFrom.None);
-        manager.setVisibleCount(3);
-        manager.setTranslationInterval(8.0f);
-        manager.setScaleInterval(0.95f);
-        manager.setSwipeThreshold(0.3f);
-        manager.setMaxDegree(20.0f);
-        manager.setDirections(Direction.VERTICAL);
-        manager.setCanScrollHorizontal(false);
-        manager.setCanScrollVertical(true);
-        adapter = new CardStackAdapter(this.getActivity(), createSpots());
-        cardStackView = findViewById(R.id.card_stack_view);
-        cardStackView.setLayoutManager(manager);
-        cardStackView.setAdapter(adapter);
+        initTeamCreateRecyclerView();
+        initTeamJoinRecyclerView();
     }
 
     @Override
     protected void initListeners() {
         super.initListeners();
-        manage_member.setOnClickListener(view -> openNewPage(TeamManagerFragment.class));
-        handle_application.setOnClickListener(view -> openNewPage(TeamApplyMessageListFragment.class));
-        leave_team.setOnClickListener(view -> {
-            DialogLoader.getInstance().showConfirmDialog(
-                    getContext(),
-                    "确认退出？",
-                    getString(R.string.lab_yes),
-                    (dialog, which) -> {
-                        XToastUtils.toast("退出成功");
-                        dialog.dismiss();
-                    },
-                    getString(R.string.lab_no),
-                    (dialog, which) -> {
-                        XToastUtils.toast("取消退出");
-                        dialog.dismiss();
-                    }
-            );
+        initTeamCreateListeners();
+        initTeamJoinListeners();
+        cardview.setOnClickListener((itemView)->{
+            itemList.add(new TeamCreate("ipad研发"));
+            mAdapter.refresh(itemList);
+            XToastUtils.toast("你又想新建团队?别太累了");
         });
     }
 
-    @Override
-    public void onCardDragging(Direction direction, float ratio) {
+    private void initTeamCreateRecyclerView() {
 
     }
 
-    @Override
-    public void onCardSwiped(Direction direction) {
+    private void initTeamJoinRecyclerView() {
 
     }
 
-    @Override
-    public void onCardRewound() {
+    private void initTeamCreateListeners(){
+        teamCreateRecyclerView.setLayoutManager(new XLinearLayoutManager(teamCreateRecyclerView.getContext()));
+        teamCreateRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        teamCreateRecyclerView.setAdapter(mAdapter = new TeamCreateAdapter());
 
+        // 生成一些demo数据
+        getDemoTeams();
+        mAdapter.refresh(itemList);
+
+        // 监听点击事件
+        mAdapter.setOnItemClickListener((itemView, item, position) -> {
+            XToastUtils.toast(itemList.get(position).getTeamName());;
+        });
     }
 
-    @Override
-    public void onCardCanceled() {
+    private void initTeamJoinListeners() {
+        teamJoinRecyclerView.setLayoutManager(new XLinearLayoutManager(teamJoinRecyclerView.getContext()));
+        teamJoinRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        teamJoinRecyclerView.setAdapter(joinAdapter = new TeamJoinAdapter());
 
+        // 生成一些demo数据
+        getDemoJoinTeams();
+        joinAdapter.refresh(joinList);
+
+        // 监听点击事件
+        joinAdapter.setOnItemClickListener((itemView, item, position) -> {
+            XToastUtils.toast(joinList.get(position).getTeamName());;
+        });
     }
 
-    @Override
-    public void onCardAppeared(View view, int position) {
-
+    private void getDemoTeams(){
+        itemList.add(new TeamCreate("敏捷开发"));
+        itemList.add(new TeamCreate("甘兰开发"));
+        itemList.add(new TeamCreate("瀑布开发"));
+        itemList.add(new TeamCreate("手机研发"));
+        itemList.add(new TeamCreate("平板开发"));
     }
 
-    @Override
-    public void onCardDisappeared(View view, int position) {
-
+    private void getDemoJoinTeams(){
+        joinList.add(new TeamJoin("石桥工程"));
+        joinList.add(new TeamJoin("校园建设工程"));
+        joinList.add(new TeamJoin("冰箱嵌入式开发"));
+        joinList.add(new TeamJoin("手机研发"));
     }
 }

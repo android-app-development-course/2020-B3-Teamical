@@ -88,8 +88,7 @@ public class NewEventFragment extends BaseFragment {
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), (v, options1, options2, options3) -> {
 
                 return false;
-            })
-                    .setTitleText("提醒周期")
+            }).setTitleText("提醒周期")
                     .setSelectOptions(0)
                     .build();
             pvOptions.setPicker(mRepeatOption);
@@ -99,8 +98,7 @@ public class NewEventFragment extends BaseFragment {
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), (v, options1, options2, options3) -> {
 
                 return false;
-            })
-                    .setTitleText("提醒周期")
+            }).setTitleText("提醒周期")
                     .setSelectOptions(0)
                     .build();
             pvOptions.setPicker(mRemindOption);
