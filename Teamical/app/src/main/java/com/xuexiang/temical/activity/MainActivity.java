@@ -90,9 +90,38 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initViews();
+        toolbar.setOnMenuItemClickListener(menuItemClickListener);
 
+        initViews();
         initListeners();
+    }
+
+    Toolbar.OnMenuItemClickListener menuItemClickListener = item -> {
+        XToastUtils.toast("点击了:" + item.getTitle());
+        switch (item.getItemId()) {
+            case R.id.action_scan:
+                //点击设置
+                XToastUtils.toast("点击了: 搜索");
+                break;
+            case R.id.action_notifications:
+                XToastUtils.toast("点击了: 通知");
+            default:
+                break;
+        }
+        return false;
+    };
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_scan:
+                XToastUtils.toast("点击了: 搜索");
+                break;
+            case R.id.action_notifications:
+                XToastUtils.toast("点击了: 通知");
+                break;
+        }
+        return true;
     }
 
     @Override

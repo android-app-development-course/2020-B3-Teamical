@@ -79,4 +79,6 @@
     <string name="team_main_create">我管理的</string>
     <string name="team_main_join">我加入的</string>
     <string name="add_a_team">创建新团队</string>
+    <string name="scan_hint">扫描</string>
+    <string name="notifications_hint">通知</string>
 </resources>

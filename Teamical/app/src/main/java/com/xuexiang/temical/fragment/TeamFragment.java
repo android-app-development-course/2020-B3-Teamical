@@ -17,6 +17,7 @@
 
 package com.xuexiang.temical.fragment;
 
+import android.text.InputType;
 import android.view.View;
 
 import androidx.cardview.widget.CardView;
@@ -40,6 +41,7 @@ import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.adapter.recyclerview.XLinearLayoutManager;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.shadow.ShadowButton;
 //import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 //import com.yuyakaido.android.cardstackview.CardStackListener;
@@ -80,6 +82,17 @@ public class TeamFragment extends BaseFragment {
      */
     @Override
     protected TitleBar initTitle() {
+//        TitleBar titleBar = super.initTitle();
+//        titleBar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//        titleBar.setTitle("我的团队");
+//        titleBar.setHeight(200);
+//        titleBar.addAction(new TitleBar.ImageAction(R.drawable.ic_search_white) {
+//            @Override
+//            public void performAction(View view) {
+//                XToastUtils.toast("搜索团队");
+//            }
+//        });
+//        return titleBar;
         return null;
     }
 
@@ -108,9 +121,31 @@ public class TeamFragment extends BaseFragment {
         initTeamCreateListeners();
         initTeamJoinListeners();
         cardview.setOnClickListener((itemView)->{
-            itemList.add(new TeamCreate("ipad研发"));
-            mAdapter.refresh(itemList);
-            XToastUtils.toast("你又想新建团队?别太累了");
+            new MaterialDialog.Builder(getContext())
+                    .iconRes(R.drawable.ic_team)
+                    .title("新建团队")
+                    .content("请输入您要创建的团队名称")
+//                    .inputType(
+//                            InputType.TYPE_CLASS_TEXT
+//                                    | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+//                                    | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                    .input(
+                            "请输入您要创建的团队名称",
+                            "",
+                            false,
+                            ((dialog, input) -> XToastUtils.toast("团队创建成功"))
+                    )
+                    .positiveText("确认")
+                    .negativeText("取消")
+                    .onPositive((dialog, which) -> {
+//                        XToastUtils.toast("你输入了:" + dialog.getInputEditText().getText().toString());
+                        itemList.add(new TeamCreate(dialog.getInputEditText().getText().toString()));
+                        mAdapter.refresh(itemList);
+                    })
+                    .cancelable(false)
+                    .show();
+
+//            XToastUtils.toast("你又想新建团队?别太累了");
         });
     }
 
