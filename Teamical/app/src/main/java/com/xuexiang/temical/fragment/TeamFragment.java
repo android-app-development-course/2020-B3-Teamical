@@ -133,7 +133,8 @@ public class TeamFragment extends BaseFragment {
 
         // 监听点击事件
         mAdapter.setOnItemClickListener((itemView, item, position) -> {
-            XToastUtils.toast(itemList.get(position).getTeamName());;
+            openNewPage(TeamManagerFragment.class);
+            //XToastUtils.toast(itemList.get(position).getTeamName());;
         });
     }
 
