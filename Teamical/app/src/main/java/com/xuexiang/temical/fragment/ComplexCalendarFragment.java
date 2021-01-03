@@ -17,10 +17,16 @@
 
 package com.xuexiang.temical.fragment;
 
+import android.os.Handler;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.xuexiang.rxutil2.rxjava.RxJavaUtils;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -34,6 +40,7 @@ import com.xuexiang.temical.adapter.entity.NewInfo;
 import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
+import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.adapter.recyclerview.XLinearLayoutManager;
 import com.xuexiang.xui.utils.WidgetUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
@@ -43,14 +50,28 @@ import com.xuexiang.temical.adapter.NewsCardViewListAdapter;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.Utils;
 import com.xuexiang.xui.widget.dialog.LoadingDialog;
+import com.xuexiang.xui.widget.popupwindow.easypopup.EasyPopup;
+import com.xuexiang.xui.widget.popupwindow.easypopup.HorizontalGravity;
+import com.xuexiang.xui.widget.popupwindow.easypopup.VerticalGravity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.FlipInTopXAnimator;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
+import tyrantgit.explosionfield.ExplosionField;
+
+import static com.xuexiang.xutil.XUtil.runOnUiThread;
 
 /**
  * @author xuexiang
@@ -118,16 +139,42 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
                 .setLoadingSpeed(8);
     }
 
+    private EasyPopup mCirclePop;
+
     private void initRecyclerView() {
         recyclerView.setLayoutManager(new XLinearLayoutManager(recyclerView.getContext()));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        recyclerView.setAdapter(mAdapter = new NewsCardViewListAdapter());
+        mAdapter=new NewsCardViewListAdapter();
+        recyclerView.setAdapter(new ScaleInAnimationAdapter(mAdapter));
+        //recyclerView.setAdapter(mAdapter = new NewsCardViewListAdapter());
         // 生成一些demo数据
         itemList = DemoDataProvider.getDemoNewInfos();
-        mAdapter.refresh(itemList);
-        // 监听点击事件
-        mAdapter.setOnItemClickListener((itemView, item, position) -> Utils.goWeb(getContext(), item.getDetailUrl()));
+        mCirclePop = new EasyPopup(getContext())
+                .setContentView(R.layout.layout_long_click_item)
+//                .setAnimationStyle(R.style.CirclePopAnim)
+                .setFocusAndOutsideEnable(true)
+                .createPopup();
+        //mAdapter.refresh(itemList);
+        for(int i=0;i<itemList.size();i++){
+            mAdapter.add(itemList.get(i));
+            //mAdapter.notifyItemInserted(i);
+        }
+        TextView deleteItem = mCirclePop.getView(R.id.tv_delete);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setItemAnimator(new FlipInTopXAnimator());
+        Objects.requireNonNull(recyclerView.getItemAnimator()).setRemoveDuration(200);
+                // 监听点击事件
+        mAdapter.setOnItemLongClickListener((itemView, item, position) -> {
+            mCirclePop.showAtAnchorView(itemView, VerticalGravity.ABOVE, HorizontalGravity.ALIGN_LEFT, 0, 0);
+            deleteItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mAdapter.delete(position);
+//                    itemList.remove(position);
+//                    mAdapter.notifyItemRemoved(position);
+                    mCirclePop.dismiss();
+                }
+            });
+        });
     }
 
     @Override

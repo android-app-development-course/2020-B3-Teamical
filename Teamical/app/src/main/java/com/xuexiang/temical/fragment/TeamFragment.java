@@ -82,17 +82,6 @@ public class TeamFragment extends BaseFragment {
      */
     @Override
     protected TitleBar initTitle() {
-//        TitleBar titleBar = super.initTitle();
-//        titleBar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-//        titleBar.setTitle("我的团队");
-//        titleBar.setHeight(200);
-//        titleBar.addAction(new TitleBar.ImageAction(R.drawable.ic_search_white) {
-//            @Override
-//            public void performAction(View view) {
-//                XToastUtils.toast("搜索团队");
-//            }
-//        });
-//        return titleBar;
         return null;
     }
 

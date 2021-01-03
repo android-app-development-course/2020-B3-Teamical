@@ -137,6 +137,9 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
     implementation 'org.kymjs.kjframe:kjframe:2.6'
+    implementation 'tyrantgit:explosionfield:1.0.1'
+    implementation 'jp.wasabeef:recyclerview-animators:2.2.7'
+
 
 }
 //自动添加X-Library依赖
