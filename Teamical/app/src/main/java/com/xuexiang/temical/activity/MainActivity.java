@@ -17,6 +17,8 @@
 
 package com.xuexiang.temical.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -24,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -47,7 +50,12 @@ import com.xuexiang.temical.fragment.profile.ProfileFragment;
 import com.xuexiang.temical.fragment.TeamFragment;
 import com.xuexiang.temical.utils.Utils;
 import com.xuexiang.temical.utils.XToastUtils;
+import com.xuexiang.xaop.annotation.IOThread;
+import com.xuexiang.xaop.annotation.Permission;
 import com.xuexiang.xaop.annotation.SingleClick;
+import com.xuexiang.xaop.enums.ThreadType;
+import com.xuexiang.xpage.core.PageOption;
+import com.xuexiang.xqrcode.XQRCode;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
@@ -59,6 +67,8 @@ import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
 
 import butterknife.BindView;
+
+import static com.xuexiang.xaop.consts.PermissionConsts.CAMERA;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener, ClickUtils.OnClick2ExitListener, Toolbar.OnMenuItemClickListener {
 
@@ -81,6 +91,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     private String[] mTitles;
 
+    static final int REQUEST_CODE = 111;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
@@ -102,6 +114,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             case R.id.action_scan:
                 //点击设置
                 XToastUtils.toast("点击了: 搜索");
+                XQRCode.startScan(this, REQUEST_CODE);
                 break;
             case R.id.action_notifications:
                 XToastUtils.toast("点击了: 通知");
@@ -111,6 +124,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         return false;
     };
 
+    @Permission(CAMERA)
+    @IOThread(ThreadType.Single)
+    private void startScan() {
+
+        XQRCode.startScan(this, REQUEST_CODE);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //处理二维码扫描结果
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            //处理扫描结果（在界面上显示）
+            handleScanResult(data);
+        }
+    }
+
+    private void handleScanResult(Intent data) {
+        if (data != null) {
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                if (bundle.getInt(XQRCode.RESULT_TYPE) == XQRCode.RESULT_SUCCESS) {
+                    String result = bundle.getString(XQRCode.RESULT_DATA);
+                    XToastUtils.toast("解析结果:" + result, Toast.LENGTH_LONG);
+                } else if (bundle.getInt(XQRCode.RESULT_TYPE) == XQRCode.RESULT_FAILED) {
+                    XToastUtils.toast("解析二维码失败", Toast.LENGTH_LONG);
+                }
+            }
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -134,6 +178,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         toolbar.setTitle(mTitles[0]);
         toolbar.inflateMenu(R.menu.menu_main);
         toolbar.setOnMenuItemClickListener(this);
+        toolbar.setOnMenuItemClickListener(menuItemClickListener);
 
         initHeader();
 
