@@ -17,6 +17,7 @@
 
 package com.xuexiang.temical.fragment;
 
+import android.text.InputType;
 import android.view.View;
 
 import androidx.cardview.widget.CardView;
@@ -109,19 +110,32 @@ public class TeamFragment extends BaseFragment {
         initTeamCreateListeners();
         initTeamJoinListeners();
         cardview.setOnClickListener((itemView)->{
+            new MaterialDialog.Builder(getContext())
+                    .iconRes(R.drawable.ic_team)
+                    .title("新建团队")
+                    .content("请输入您要创建的团队名称")
+//                    .inputType(
+//                            InputType.TYPE_CLASS_TEXT
+//                                    | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+//                                    | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                    .input(
+                            "请输入您要创建的团队名称",
+                            "",
+                            false,
+                            ((dialog, input) -> XToastUtils.toast("团队创建成功"))
+                    )
+                    .positiveText("确认")
+                    .negativeText("取消")
+                    .onPositive((dialog, which) -> {
+//                        XToastUtils.toast("你输入了:" + dialog.getInputEditText().getText().toString());
+                        itemList.add(new TeamCreate(dialog.getInputEditText().getText().toString()));
+                        mAdapter.refresh(itemList);
+                    })
+                    .cancelable(false)
+                    .show();
 
-            showCustomDialog();
+//            XToastUtils.toast("你又想新建团队?别太累了");
         });
-    }
-
-    private void showCustomDialog() {
-        new MaterialDialog.Builder(this.getContext())
-                .customView(R.layout.dialog_custom, true)
-                .title("新建团队")
-                .positiveText(R.string.lab_submit)
-                .negativeText(R.string.lab_cancel)
-                .show();
-
     }
 
     private void initTeamCreateRecyclerView() {
