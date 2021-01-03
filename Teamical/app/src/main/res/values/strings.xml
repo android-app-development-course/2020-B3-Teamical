@@ -79,4 +79,6 @@
     <string name="team_main_create">我管理的</string>
     <string name="team_main_join">我加入的</string>
     <string name="add_a_team">创建新团队</string>
+    <string name="lab_submit">确定</string>
+    <string name="lab_cancel">取消</string>
 </resources>

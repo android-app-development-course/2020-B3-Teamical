@@ -237,7 +237,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         MenuItem item = bottomNavigation.getMenu().getItem(position);
         toolbar.setTitle(item.getTitle());
         item.setChecked(true);
-
         updateSideNavStatus(item);
     }
 

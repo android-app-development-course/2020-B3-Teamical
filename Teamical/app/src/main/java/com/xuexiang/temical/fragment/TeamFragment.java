@@ -40,6 +40,7 @@ import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.adapter.recyclerview.XLinearLayoutManager;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.dialog.DialogLoader;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.shadow.ShadowButton;
 //import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 //import com.yuyakaido.android.cardstackview.CardStackListener;
@@ -108,10 +109,19 @@ public class TeamFragment extends BaseFragment {
         initTeamCreateListeners();
         initTeamJoinListeners();
         cardview.setOnClickListener((itemView)->{
-            itemList.add(new TeamCreate("ipad研发"));
-            mAdapter.refresh(itemList);
-            XToastUtils.toast("你又想新建团队?别太累了");
+
+            showCustomDialog();
         });
+    }
+
+    private void showCustomDialog() {
+        new MaterialDialog.Builder(this.getContext())
+                .customView(R.layout.dialog_custom, true)
+                .title("新建团队")
+                .positiveText(R.string.lab_submit)
+                .negativeText(R.string.lab_cancel)
+                .show();
+
     }
 
     private void initTeamCreateRecyclerView() {
