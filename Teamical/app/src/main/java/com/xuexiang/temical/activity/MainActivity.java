@@ -20,6 +20,7 @@ package com.xuexiang.temical.activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -39,6 +40,7 @@ import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.fragment.AboutFragment;
 import com.xuexiang.temical.fragment.ComplexCalendarFragment;
 import com.xuexiang.temical.fragment.NewEventFragment;
+import com.xuexiang.temical.fragment.NotificationFragment;
 import com.xuexiang.temical.fragment.SettingsFragment;
 import com.xuexiang.temical.fragment.StatisticsFragment;
 import com.xuexiang.temical.fragment.TeamApplyMessageListFragment;
@@ -89,9 +91,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        toolbar.setOnMenuItemClickListener(menuItemClickListener);
-
         initViews();
         initListeners();
     }
@@ -104,25 +103,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 XToastUtils.toast("点击了: 搜索");
                 break;
             case R.id.action_notifications:
-                XToastUtils.toast("点击了: 通知");
+//                XToastUtils.toast("点击了: 通知");
+                openNewPage(NotificationFragment.class);
             default:
                 break;
         }
         return false;
     };
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_scan:
-                XToastUtils.toast("点击了: 搜索");
-                break;
-            case R.id.action_notifications:
-                XToastUtils.toast("点击了: 通知");
-                break;
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_scan:
+//                XToastUtils.toast("click item scan");
+//                break;
+//            case R.id.action_notifications:
+//                XToastUtils.toast("click item Remove");
+//                break;
+//            default:
+//                break;
+//        }
+//        return true;
+//    }
 
     @Override
     protected boolean isSupportSlideBack() {
@@ -134,7 +142,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         toolbar.setTitle(mTitles[0]);
         toolbar.inflateMenu(R.menu.menu_main);
         toolbar.setOnMenuItemClickListener(this);
-
+        toolbar.setOnMenuItemClickListener(menuItemClickListener);
         initHeader();
 
         //主页内容填充

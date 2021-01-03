@@ -111,4 +111,9 @@
         <item>周六</item>
     </string-array>
 
+    <string-array name="router_choice_entry">
+        <item>同意</item>
+        <item>拒绝</item>
+        <item>忽略</item>
+    </string-array>
 </resources>

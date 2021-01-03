@@ -73,7 +73,7 @@ public class NewEventFragment extends BaseFragment {
         titleBar.addAction(new TitleBar.ImageAction(R.drawable.ic_ok) {
             @Override
             public void performAction(View view) {
-
+//                XToastUtils.toast("点击了: ok");
             }
         });
         return titleBar;
