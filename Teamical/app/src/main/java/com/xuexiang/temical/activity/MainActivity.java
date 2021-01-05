@@ -39,6 +39,7 @@ import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.fragment.AboutFragment;
 import com.xuexiang.temical.fragment.ComplexCalendarFragment;
 import com.xuexiang.temical.fragment.NewEventFragment;
+import com.xuexiang.temical.fragment.NotificationFragment;
 import com.xuexiang.temical.fragment.SettingsFragment;
 import com.xuexiang.temical.fragment.StatisticsFragment;
 import com.xuexiang.temical.fragment.TeamApplyMessageListFragment;
@@ -90,8 +91,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        toolbar.setOnMenuItemClickListener(menuItemClickListener);
-
         initViews();
         initListeners();
     }
@@ -104,25 +103,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 XToastUtils.toast("点击了: 搜索");
                 break;
             case R.id.action_notifications:
+                openNewPage(NotificationFragment.class);
                 XToastUtils.toast("点击了: 通知");
             default:
                 break;
         }
         return false;
     };
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_scan:
-                XToastUtils.toast("点击了: 搜索");
-                break;
-            case R.id.action_notifications:
-                XToastUtils.toast("点击了: 通知");
-                break;
-        }
-        return true;
-    }
 
     @Override
     protected boolean isSupportSlideBack() {
@@ -133,8 +120,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         mTitles = ResUtils.getStringArray(R.array.home_titles);
         toolbar.setTitle(mTitles[0]);
         toolbar.inflateMenu(R.menu.menu_main);
-        toolbar.setOnMenuItemClickListener(this);
-
+//        toolbar.setOnMenuItemClickListener(this);
+        toolbar.setOnMenuItemClickListener(menuItemClickListener);
         initHeader();
 
         //主页内容填充
