@@ -84,6 +84,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        main {
+            jni {
+                srcDirs 'src\\main\\jni', 'src\\main\\jniLibs'
+            }
+        }
+    }
+    useLibrary 'org.apache.http.legacy'
+
 }
 
 dependencies {
@@ -139,7 +148,7 @@ dependencies {
     implementation 'org.kymjs.kjframe:kjframe:2.6'
     implementation 'tyrantgit:explosionfield:1.0.1'
     implementation 'jp.wasabeef:recyclerview-animators:2.2.7'
-
+    implementation 'cn.bmob.android:bmob-sdk:3.7.8'
 
 }
 //自动添加X-Library依赖

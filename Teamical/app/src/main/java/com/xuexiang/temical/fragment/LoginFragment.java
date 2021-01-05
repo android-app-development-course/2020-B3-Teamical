@@ -17,11 +17,17 @@
 
 package com.xuexiang.temical.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.xuexiang.temical.R;
 import com.xuexiang.rxutil2.rxjava.RxJavaUtils;
+import com.xuexiang.temical.activity.LoginActivity;
 import com.xuexiang.temical.activity.MainActivity;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.RandomUtils;
@@ -45,6 +51,12 @@ import com.xuexiang.xutil.app.ActivityUtils;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobSMS;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.UpdateListener;
+
 
 /**
  * 登录页面
@@ -61,9 +73,14 @@ public class LoginFragment extends BaseFragment {
     MaterialEditText etVerifyCode;
     @BindView(R.id.btn_get_verify_code)
     RoundButton btnGetVerifyCode;
-
+    Context mcontext=this.getContext();
     // 弹出进度框
     LoadingDialog mLoadingDialog;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bmob.initialize(requireContext(), "2499cbc125ca9e7bab7fc97e29e7d8bd");
+    }
 
     private CountDownButtonHelper mCountDownHelper;
 
@@ -145,11 +162,35 @@ public class LoginFragment extends BaseFragment {
      * 获取验证码
      */
     private void getVerifyCode(String phoneNumber) {
-        // TODO: 2020/8/29 这里只是界面演示而已
-        XToastUtils.warning("只是演示，验证码请随便输");
-        mCountDownHelper.start();
-    }
+        BmobSMS.requestSMSCode(phoneNumber,  "验证码", new QueryListener<Integer>() {
+            @Override
+            public void done(Integer smsId,BmobException e) {
+                if (e == null) {
+                    //发送成功时，让获取验证码按钮不可点击，且为灰色
+                    btnGetVerifyCode.setClickable(false);
+                    btnGetVerifyCode.setTextColor(Color.rgb(192,192,192));
+                    Toast.makeText(LoginFragment.this.getContext(), "获取成功", Toast.LENGTH_LONG).show();
+                    new CountDownTimer(60000, 1000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            btnGetVerifyCode.setText("获取验证码("+millisUntilFinished / 1000 + "秒)");
+                        }
 
+                        @Override
+                        public void onFinish() {
+                            btnGetVerifyCode.setClickable(true);
+                            btnGetVerifyCode.setTextColor(getResources().getColor(R.color.selector_round_button_main_theme_color));
+                            btnGetVerifyCode.setText("重新发送");
+                        }
+                    }.start();
+                    Log.e("MESSAGE:", "4");
+                }
+                else {
+                    Toast.makeText(LoginFragment.this.getContext(), "验证码发送失败，请检查网络连接", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
     /**
      * 根据验证码登录
      *
@@ -157,11 +198,21 @@ public class LoginFragment extends BaseFragment {
      * @param verifyCode  验证码
      */
     private void loginByVerifyCode(String phoneNumber, String verifyCode) {
-        // TODO: 2020/8/29 这里只是界面演示而已
-        mLoadingDialog.show();
-        RxJavaUtils.delay(2, aLong -> {
-            mLoadingDialog.dismiss();
-            onLoginSuccess();
+        BmobSMS.verifySmsCode(phoneNumber, verifyCode, new UpdateListener() {
+            @Override
+            public void done( BmobException e) {
+                if(e==null)
+                {
+                    mLoadingDialog.show();
+                    RxJavaUtils.delay(2, aLong -> {
+                        mLoadingDialog.dismiss();
+                        onLoginSuccess();
+                    });
+                }
+                else{
+                    TokenUtils.handleLoginSuccess(null);
+                }
+            }
         });
     }
 
