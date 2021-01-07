@@ -5,8 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.xuexiang.temical.R;
-import com.xuexiang.temical.adapter.entity.TeamCreate;
 import com.xuexiang.temical.adapter.entity.TeamJoin;
+import com.xuexiang.temical.adapter.entity.Teammate;
 import com.xuexiang.temical.fragment.components.refresh.diffutil.DiffUtilCallback;
 import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
@@ -16,7 +16,7 @@ import com.xuexiang.xutil.common.logger.Logger;
 
 import java.util.List;
 
-public class TeamJoinAdapter extends BaseRecyclerAdapter<TeamJoin> {
+public class TeamJoinAdapter extends BaseRecyclerAdapter<Teammate> {
 
     @Override
     public int getItemLayoutId(int viewType) {
@@ -24,7 +24,7 @@ public class TeamJoinAdapter extends BaseRecyclerAdapter<TeamJoin> {
     }
 
     @Override
-    public void bindData(@NonNull RecyclerViewHolder holder, int position, TeamJoin model) {
+    public void bindData(@NonNull RecyclerViewHolder holder, int position, Teammate model) {
         if (model != null) {
 //            holder.text(R.id.tv_user_name, model.getUserName());
 //            holder.text(R.id.tv_tag, model.getUsername());
@@ -49,12 +49,12 @@ public class TeamJoinAdapter extends BaseRecyclerAdapter<TeamJoin> {
         }
 
         Logger.e("正在进行增量刷新:" + position);
-        TeamJoin teamJoin = getItem(position);
+        Teammate teammate = getItem(position);
         for (String key : payload.keySet()) {
             switch (key) {
                 case DiffUtilCallback.PAYLOAD_USER_NAME:
                     //这里可以用payload里的数据，不过newInfo也是新的 也可以用
-                    holder.text(R.id.team_join_name, teamJoin.getTeamName());
+                    holder.text(R.id.team_join_name, teammate.getTeamName());
                     break;
                 case DiffUtilCallback.PAYLOAD_READ_NUMBER:
 //                    holder.text(R.id.tv_read, "阅读量 " + payload.getInt(DiffUtilCallback.PAYLOAD_READ_NUMBER));

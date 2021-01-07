@@ -33,7 +33,7 @@
         style="@style/TextStyle.Title"
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"
-        android:text="登 录"
+        android:text="注 册"
         android:textSize="30sp" />
 
     <LinearLayout
@@ -56,12 +56,37 @@
                 app:srcCompat="@drawable/ic_phone" />
 
             <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
-                android:id="@+id/et_phone_number"
+                android:id="@+id/et_register_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
                 android:hint="@string/tip_please_input_phone_number"
                 android:inputType="number"
+                app:met_clearButton="true"
+                app:met_errorMessage="@string/tip_phone_number_error"
+                app:met_floatingLabel="normal"
+                app:met_floatingLabelText="@string/title_phone_number" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:tint="?attr/colorAccent"
+                app:srcCompat="@drawable/ic_username" />
+
+            <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
+                android:id="@+id/et_register_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:hint="请输入用户名"
+                android:inputType="textPersonName"
                 app:met_clearButton="true"
                 app:met_errorMessage="@string/tip_phone_number_error"
                 app:met_floatingLabel="normal"
@@ -84,35 +109,18 @@
                 app:srcCompat="@drawable/ic_password" />
 
             <com.xuexiang.xui.widget.edittext.materialedittext.MaterialEditText
-                android:id="@+id/et_verify_code"
+                android:id="@+id/et_register_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
-                android:hint="@string/hint_please_input_verify_code"
-                android:inputType="number"
+                android:hint="请输入密码"
+                android:inputType="text"
                 app:met_clearButton="false"
-                app:met_errorMessage="@string/tip_verify_code_error"
+                app:met_errorMessage="请输入密码"
                 app:met_floatingLabel="normal"
-                app:met_floatingLabelText="@string/lab_verify_code"
-                app:met_maxCharacters="4"
-                app:met_regexp="@string/regex_verify_code" />
+                app:met_floatingLabelText="@string/lab_verify_code" />
 
-            <com.xuexiang.xui.widget.button.roundbutton.RoundButton
-                android:id="@+id/btn_get_verify_code"
-                style="@style/RoundButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:paddingStart="10dp"
-                android:paddingTop="3dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="3dp"
-                android:text="@string/action_get_verify_code"
-                android:textColor="@color/selector_round_button_main_theme_color"
-                android:textSize="13sp"
-                app:rb_borderColor="@color/selector_round_button_main_theme_color"
-                app:rb_borderWidth="1.5dp"
-                app:rb_radius="15dp" />
+
 
         </FrameLayout>
 
@@ -122,18 +130,18 @@
             android:layout_height="wrap_content">
 
             <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
-                android:id="@+id/tv_other_login"
+                android:id="@+id/tv_register_login"
                 style="@style/TextStyle.Explain"
                 android:layout_gravity="start"
                 android:paddingStart="10dp"
                 android:paddingTop="5dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
-                android:text="其他登录方式"
+                android:text="登录"
                 android:textColor="@color/xui_config_color_primary_text" />
 
             <com.xuexiang.xui.widget.alpha.XUIAlphaTextView
-                android:id="@+id/tv_forget_password"
+                android:id="@+id/tv_register_forget"
                 style="@style/TextStyle.Explain"
                 android:layout_gravity="end"
                 android:paddingStart="10dp"
@@ -148,10 +156,10 @@
     </LinearLayout>
 
     <com.xuexiang.xui.widget.textview.supertextview.SuperButton
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_register"
         style="@style/SuperButton.Primary.Login"
         android:layout_marginTop="16dp"
-        android:text="@string/title_login_register" />
+        android:text="注册" />
 
     <FrameLayout
         android:layout_width="match_parent"

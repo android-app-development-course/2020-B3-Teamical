@@ -21,6 +21,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 
 import com.xuexiang.temical.R;
+import com.xuexiang.temical.adapter.entity.CurrentUser;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.TokenUtils;
 import com.xuexiang.temical.utils.XToastUtils;
@@ -96,9 +97,14 @@ public class SettingsFragment extends BaseFragment implements SuperTextView.OnSu
                         getString(R.string.lab_logout_confirm),
                         getString(R.string.lab_yes),
                         (dialog, which) -> {
+                            // 清空登录状态
+                            CurrentUser.setUserName("");
+                            CurrentUser.setPhoneNum("");
+                            CurrentUser.setPassword("");
                             dialog.dismiss();
                             XUtil.getActivityLifecycleHelper().exit();
                             TokenUtils.handleLogoutSuccess();
+                            openNewPage(LoginByPasswordFragment.class);
                         },
                         getString(R.string.lab_no),
                         (dialog, which) -> dialog.dismiss()

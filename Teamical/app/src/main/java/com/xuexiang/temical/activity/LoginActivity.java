@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.xuexiang.temical.core.BaseActivity;
+import com.xuexiang.temical.fragment.LoginByPasswordFragment;
 import com.xuexiang.temical.fragment.LoginFragment;
 import com.xuexiang.xui.utils.KeyboardUtils;
 import com.xuexiang.xui.utils.StatusBarUtils;
@@ -37,7 +38,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        openPage(LoginFragment.class, getIntent().getExtras());
+        openPage(LoginByPasswordFragment.class, getIntent().getExtras());
     }
 
     @Override

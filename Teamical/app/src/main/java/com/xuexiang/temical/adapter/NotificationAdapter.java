@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 
 import com.xuexiang.temical.R;
 import com.xuexiang.temical.adapter.entity.Notification;
-import com.xuexiang.temical.adapter.entity.TeamCreate;
 import com.xuexiang.temical.fragment.components.refresh.diffutil.DiffUtilCallback;
 import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;

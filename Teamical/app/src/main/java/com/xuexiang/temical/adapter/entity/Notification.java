@@ -1,33 +1,32 @@
 package com.xuexiang.temical.adapter.entity;
 
-import androidx.annotation.NonNull;
 
-import java.util.concurrent.atomic.AtomicLong;
+import cn.bmob.v3.BmobObject;
 
 /**
  * 管理的团队团队
  * 2021.1.2
  */
-public class Notification implements Cloneable {
+public class Notification extends BmobObject {
 
     private long ID;
 
-    /**
-     * 头像图片
-     */
+    // 头像图片
     private String ImageUrl;
 
-    /**
-     * 申请用户
-     */
+    // 申请用户
     private String UserName;
 
-    /**
-     * 团队名
-     */
+     // 团队名
     private String TeamName;
 
     private String Status;
+
+    // 申请者手机号码
+    private String ApplicantPN;
+
+    // 审核者手机号码
+    private String CheckerPN;
 
 
     public Notification() {
@@ -80,23 +79,21 @@ public class Notification implements Cloneable {
 
     public void setStatus(String status) {Status = status;}
 
-    @NonNull
-    @Override
-    public String toString() {
-        return "Notification{" +
-                "UserName='" + UserName + '\'' +
-                ", TeamName='" + TeamName + '\'' +
-                '}';
+    public String getApplicantPN() {
+        return ApplicantPN;
     }
 
-    @NonNull
-    @Override
-    public Notification clone() {
-        try {
-            return (Notification) super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        return new Notification();
+    public String getCheckerPN() {
+        return CheckerPN;
+    }
+
+    public Notification setApplicantPN(String applicantPN) {
+        this.ApplicantPN = applicantPN;
+        return this;
+    }
+
+    public Notification setCheckerPN(String checkerPN) {
+        this.CheckerPN = checkerPN;
+        return this;
     }
 }

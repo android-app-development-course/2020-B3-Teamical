@@ -19,6 +19,7 @@ package com.xuexiang.temical.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,10 +35,14 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.xuexiang.temical.R;
+import com.xuexiang.temical.adapter.entity.CurrentUser;
+import com.xuexiang.temical.adapter.entity.User;
 import com.xuexiang.temical.core.BaseActivity;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.fragment.AboutFragment;
+import com.xuexiang.temical.fragment.BackFontTestFragment;
 import com.xuexiang.temical.fragment.ComplexCalendarFragment;
+import com.xuexiang.temical.fragment.LoginByPasswordFragment;
 import com.xuexiang.temical.fragment.NewEventFragment;
 import com.xuexiang.temical.fragment.NotificationFragment;
 import com.xuexiang.temical.fragment.SettingsFragment;
@@ -52,6 +57,7 @@ import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.app.ActivityUtils;
@@ -60,6 +66,9 @@ import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
 
 import butterknife.BindView;
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener, ClickUtils.OnClick2ExitListener, Toolbar.OnMenuItemClickListener {
 
@@ -91,25 +100,80 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // 数据库服务
+        Bmob.initialize(this, "4a6d691cfdb623ee87f8c99605ea55ad");
+
         initViews();
         initListeners();
     }
 
     Toolbar.OnMenuItemClickListener menuItemClickListener = item -> {
-        XToastUtils.toast("点击了:" + item.getTitle());
+//        XToastUtils.toast("点击了:" + item.getTitle());
         switch (item.getItemId()) {
             case R.id.action_scan:
                 //点击设置
-                XToastUtils.toast("点击了: 搜索");
+                XToastUtils.toast("点击了: 扫描");
+//                openNewPage(BackFontTestFragment.class);
+//                doSearchATeam();
                 break;
             case R.id.action_notifications:
                 openNewPage(NotificationFragment.class);
-                XToastUtils.toast("点击了: 通知");
+//                XToastUtils.toast("点击了: 通知");
             default:
                 break;
         }
         return false;
     };
+
+//    private void doSearchATeam() {
+//        if (CurrentUser.getUserName().length() > 0) {
+//            new MaterialDialog.Builder(this)
+//                    .iconRes(R.drawable.ic_team)
+//                    .title("申请加入加入团队")
+//                    .content("请依次输入您要加入的团队名称,团队负责人手机号,中间用-分开")
+//                    //                    .inputType(
+//                    //                            InputType.TYPE_CLASS_TEXT
+//                    //                                    | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+//                    //                                    | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+//                    .input(
+//                            "团队名称-团队负责人手机号",
+//                            "",
+//                            false,
+//                            ((dialog, input) -> Log.d("add a team", "申请消息"))
+//                    )
+//                    .positiveText("确认")
+//                    .negativeText("取消")
+//                    .onPositive((dialog, which) -> {
+//                        //                        XToastUtils.toast("你输入了:" + dialog.getInputEditText().getText().toString());
+//                        //                        itemList.add(new TeamCreate(dialog.getInputEditText().getText().toString()));
+//                        //                        mAdapter.refresh(itemList);
+//                        String input = dialog.getInputEditText().getText().toString();
+//                        doSubmitApply(input);
+//                    })
+//                    .cancelable(false)
+//                    .show();
+//        } else {
+//            XToastUtils.toast("请您先登录");
+//            openNewPage(LoginByPasswordFragment.class);
+//        }
+//    }
+
+//    private void doSubmitApply(String input) {
+//        try {
+//            String[] temp = input.split("-");
+//            String teamName = temp[0];
+//            String managerPN = temp[1];
+//            XToastUtils.toast("a: " + teamName + "*" + managerPN);
+//            if (teamName.length() <= 0 || managerPN.length() <= 0) {
+////                XToastUtils.toast("请您输入正确的格式.");
+//                return;
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+////            XToastUtils.toast("请您输入正确的格式");
+//        }
+//    }
 
     @Override
     protected boolean isSupportSlideBack() {
@@ -123,6 +187,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 //        toolbar.setOnMenuItemClickListener(this);
         toolbar.setOnMenuItemClickListener(menuItemClickListener);
         initHeader();
+
 
         //主页内容填充
         BaseFragment[] fragments = new BaseFragment[]{
@@ -189,7 +254,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         openNewPage(TeamManagerFragment.class);
                         break;
                     case R.id.nav_starred:
-                        openNewPage(TeamApplyMessageListFragment.class);
+                        openNewPage(BackFontTestFragment.class);
                         break;
                     default:
                         XToastUtils.toast("点击了:" + menuItem.getTitle());

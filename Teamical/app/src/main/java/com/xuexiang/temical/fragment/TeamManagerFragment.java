@@ -21,12 +21,14 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -64,7 +66,10 @@ import com.xuexiang.temical.adapter.ContactAdapter;
 import com.xuexiang.temical.adapter.NewsCardViewListAdapter;
 import com.xuexiang.temical.adapter.TeammateViewListAdapter;
 import com.xuexiang.temical.adapter.entity.Contact;
+import com.xuexiang.temical.adapter.entity.CurrentUser;
 import com.xuexiang.temical.adapter.entity.NewInfo;
+import com.xuexiang.temical.adapter.entity.TeamCreate;
+import com.xuexiang.temical.adapter.entity.Teammate;
 import com.xuexiang.temical.adapter.entity.TeammateInfo;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.HanziToPinyin;
@@ -83,6 +88,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 import static com.github.mikephil.charting.animation.Easing.EasingOption.EaseInOutQuad;
 
@@ -103,11 +112,18 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
     EditText mSearchInput;
     @BindView(R.id.school_friend_member)
     ListView mListView;
+
     private TextView mFooterView;
     private int choose = -1;
-    private List<TeammateInfo> itemList = new ArrayList<>();
+    private List<Teammate> itemList = new ArrayList<>();
     private ContactAdapter mAdapter;
     private ArrayList<Contact> datas = new ArrayList<>();
+    // 用来装组员的名字
+    ArrayList<String> texts = new ArrayList<>();
+    //当前访问的团队名字
+    String teamName;
+    // 当前访问的团队负责人的手机号
+    String managerPN;
 
     @Override
     protected int getLayoutId() {
@@ -116,108 +132,29 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
 
     private char lastFirstAlpha;
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initViews() {
+        Bundle arguments = getArguments().getBundle("key");
+        teamName = arguments.getString("TeamName");
+        managerPN = arguments.getString("ManagerPN");
+//        XToastUtils.toast("传来的: " + teamName + " " + managerPN);
+
         mSideBar.setTextView(mDialog);
         mSideBar.setOnTouchingLetterChangedListener(this);
         mSearchInput.addTextChangedListener(this);
         mFooterView = (TextView) View.inflate(this.getContext(), R.layout.item_list_contact_count, null);
         mListView.addFooterView(mFooterView);
-        ArrayList<String> texts = new ArrayList<>();
-        texts.add("____00");
-        texts.add("张晓明aaa");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("bbb");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ccc");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
-        texts.add("ddd");
 
-        parser(texts);
+//        getDemoData();
+        getTeammateFromServer(teamName, managerPN);
+        // 只有管理员才有操作权限
+        if (managerPN.equals(CurrentUser.getPhoneNum())) {
+            initListViewListener();
+        }
+    }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private void initListViewListener() {
         mListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -243,13 +180,15 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               showSimpleBottomSheetGrid();
+                String opTeammateName = datas.get(i).getName();
+                XToastUtils.toast("item: " + opTeammateName);
+
+                showSimpleBottomSheetGrid(opTeammateName);
             }
         });
-
     }
 
-    private void showSimpleBottomSheetGrid() {
+    private void showSimpleBottomSheetGrid(String opTeammateName) {
         final int SET_MANAGER = 0;
         final int REMOVE_MEMBER = 1;
         BottomSheet.BottomGridSheetBuilder builder = new BottomSheet.BottomGridSheetBuilder(getActivity());
@@ -259,13 +198,29 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
                 .setOnSheetItemClickListener((dialog, itemView) -> {
                     dialog.dismiss();
                     int tag = (int) itemView.getTag();
-                    XToastUtils.toast("tag:" + tag + ", content:" + itemView.toString());
+                    switch (tag) {
+                        case 1:
+                            // 通过寻找itemList中等于opTeammateName名字的进行删除
+                            deleteByName(opTeammateName);
+                            break;
+                        default:
+                            XToastUtils.toast("暂时不支持多个管理员，请期待下一个版本");
+//                            XToastUtils.toast("tag:" + tag + ", content:" + itemView.toString());
+                            break;
+                    }
                 }).build().show();
+    }
 
-
+    private void parserTeammateName() {
+        texts.clear();
+        for (int i = 0; i < itemList.size(); i++) {
+            texts.add(itemList.get(i).getMateName());
+        }
+        parser(texts);
     }
 
     private void parser(ArrayList<String> texts) {
+        datas.clear();
         for (int i = 0; i < texts.size(); i++) {
             Contact data = new Contact();
             data.setName(texts.get(i));
@@ -277,6 +232,7 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
         mFooterView.setText(datas.size() + "位团队成员");
         mAdapter = new ContactAdapter(mListView, datas);
         mListView.setAdapter(mAdapter);
+        mAdapter.refresh(datas);
     }
 
     @Override
@@ -331,6 +287,55 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
     @Override
     public void afterTextChanged(Editable editable) {
 
+    }
+
+    private void getDemoData() {
+        texts.add("Lisa");
+        texts.add("张晓明");
+        texts.add("bbb");
+    }
+
+    private void getTeammateFromServer(String teamName, String managerPN) {
+        BmobQuery<Teammate> categoryBmobQuery = new BmobQuery<>();
+        categoryBmobQuery.addWhereEqualTo("TeamName", teamName);
+        categoryBmobQuery.addWhereEqualTo("ManagerPN", managerPN);
+        categoryBmobQuery.findObjects(new FindListener<Teammate>() {
+            @Override
+            public void done(List<Teammate> objectLt, BmobException e) {
+                if (e == null) {
+//                    XToastUtils.toast("查询team成功：" + objectLt.get(0).getManagerPN());
+                    itemList.clear();
+                    // 将所有object装进去
+                    itemList.addAll(objectLt);
+                    // 进行后续操作
+                    parserTeammateName();
+                } else {
+                    Log.e("BMOB, 查询数据失败", e.toString());
+                    XToastUtils.toast("暂时没有成员");
+                }
+            }
+        });
+    }
+
+    private void deleteByName(String delName) {
+        for (int i = 0; i < itemList.size(); i++) {
+            Teammate tm = itemList.get(i);
+            if (tm.getMateName().equals(delName)) {
+                tm.delete(new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        if (e == null) {
+                            // u1.getUpdatedAt()返回null
+                            XToastUtils.toast("删除成功");
+                        } else {
+                            XToastUtils.toast("删除失败：" + e.getMessage());
+                        }
+                    }
+                });
+                getTeammateFromServer(teamName, managerPN);
+                break;
+            }
+        }
     }
 }
 

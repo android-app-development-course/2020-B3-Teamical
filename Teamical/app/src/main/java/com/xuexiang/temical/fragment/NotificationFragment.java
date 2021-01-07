@@ -17,6 +17,7 @@
 
 package com.xuexiang.temical.fragment;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -24,9 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.xuexiang.temical.R;
 import com.xuexiang.temical.adapter.NotificationAdapter;
-import com.xuexiang.temical.adapter.TeamCreateAdapter;
+import com.xuexiang.temical.adapter.entity.CurrentUser;
 import com.xuexiang.temical.adapter.entity.Notification;
 import com.xuexiang.temical.adapter.entity.TeamCreate;
+import com.xuexiang.temical.adapter.entity.Teammate;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.xpage.annotation.Page;
@@ -39,6 +41,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bmob.v3.BmobBatch;
+import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BatchResult;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListListener;
+import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 //import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 //import com.yuyakaido.android.cardstackview.CardStackListener;
@@ -95,6 +106,7 @@ public class NotificationFragment extends BaseFragment {
      */
     @Override
     protected void initViews() {
+        XToastUtils.toast("CurrentUser: " + CurrentUser.getUserName());
         initNotificationRecyclerView();
     }
 
@@ -108,19 +120,22 @@ public class NotificationFragment extends BaseFragment {
 
     }
 
-    private void initNotificationListeners(){
+    private void initNotificationListeners() {
         notificationRecyclerView.setLayoutManager(new XLinearLayoutManager(notificationRecyclerView.getContext()));
         notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
         notificationRecyclerView.setAdapter(nAdapter = new NotificationAdapter());
 
         // 生成一些demo数据
-        getDemoTeams();
-        nAdapter.refresh(itemList);
+//        getDemoTeams();
+        getMessageFromServer();
+
 
         // 监听点击事件
         nAdapter.setOnItemClickListener((itemView, item, position) -> {
-//            XToastUtils.toast(itemList.get(position).getTeamName() + item.getUserName());;
-            showSingleChoiceDialog(item);
+//            XToastUtils.toast(itemList.get(position).getTeamName() + item.getUserName());
+            if (item.getStatus().equals("待审核")) {
+                showSingleChoiceDialog(item);
+            }
         });
     }
 
@@ -133,25 +148,28 @@ public class NotificationFragment extends BaseFragment {
                         (dialog, itemView, which, text) -> {
 //                            XToastUtils.toast(which + ": " + text);
                             // which是下标，从0开始，text是选项内容
-                            switch (which){
+
+                            switch (which) {
                                 case 0: // 同意
-                                    item.setStatus("已同意");
+                                    doAgree(item);
                                     break;
                                 case 1: // 同意
-                                    item.setStatus("已拒绝");
+                                    doReject(item);
                                     break;
                                 case 2: // 同意
-                                    item.setStatus("已忽略");
+                                    doIgnore(item);
                                     break;
                                 default:
                                     break;
                             }
                             nAdapter.refresh(itemList);
+
                             return true;
                         })
                 .positiveText("确认")
                 .negativeText("取消")
                 .show();
+
     }
 
     private void showSimpleConfirmDialog() {
@@ -160,17 +178,137 @@ public class NotificationFragment extends BaseFragment {
                 .positiveText(R.string.lab_yes)
                 .negativeText(R.string.lab_no)
                 .onPositive((dialog, which) -> {
+
                     XToastUtils.success("清空成功");
-                    itemList.clear();
-                    nAdapter.refresh(itemList);
+                    deleteAllMessage();
                 })
                 .show();
     }
 
-    private void getDemoTeams(){
+    private void getDemoTeams() {
         itemList.add(new Notification("周莹", "华师研发", "待审核"));
         itemList.add(new Notification("枫亭", "柏木工程", "待审核"));
         itemList.add(new Notification("孔明", "华师研发", "待审核"));
         itemList.add(new Notification("心琳", "华师研发", "待审核"));
+    }
+
+    private void getMessageFromServer() {
+        itemList.clear();
+        BmobQuery<Notification> categoryBmobQuery = new BmobQuery<>();
+        categoryBmobQuery.addWhereEqualTo("CheckerPN", CurrentUser.getPhoneNum());
+        categoryBmobQuery.findObjects(new FindListener<Notification>() {
+            @Override
+            public void done(List<Notification> objectLt, BmobException e) {
+                if (e == null) {
+//                    XToastUtils.toast("查询成功：" + objectLt.get(0).getCheckerPN());
+                    itemList.addAll(objectLt);
+                    nAdapter.refresh(itemList);
+                } else {
+                    Log.e("BMOB", e.toString());
+                    XToastUtils.toast("暂时没有消息");
+                }
+            }
+        });
+    }
+
+    private void doAgree(Notification item){
+        // 更新界面
+        item.setStatus("已同意");
+        item.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    // u1.getUpdatedAt()返回修改后时间
+                    XToastUtils.toast("更新成功:" + item.getUpdatedAt());
+                    // 将此人添加到团队中
+                    createATeammate(item);
+                } else {
+                    XToastUtils.toast("更新失败：" + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void doReject(Notification item){
+        // 更新界面
+        item.setStatus("已拒绝");
+        item.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    // u1.getUpdatedAt()返回修改后时间
+                    XToastUtils.toast("更新成功:" + item.getUpdatedAt());
+                } else {
+                    XToastUtils.toast("更新失败：" + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void doIgnore(Notification item){
+        // 更新界面
+        item.setStatus("已忽略");
+        item.update(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    // u1.getUpdatedAt()返回修改后时间
+                    XToastUtils.toast("更新成功:" + item.getUpdatedAt());
+                } else {
+                    XToastUtils.toast("更新失败：" + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void createATeammate(Notification item){
+        Teammate tm = new Teammate();
+        tm.setMateName(item.getUserName());
+        tm.setManagerPN(CurrentUser.getPhoneNum());
+//        tm.setManagerPN(item.getCheckerPN());
+        tm.setTeamName(item.getTeamName());
+        tm.setMatePN(item.getApplicantPN());
+        tm.save(new SaveListener<String>() {
+            @Override
+            public void done(String objectId, BmobException e) {
+                if (e == null) {
+                    XToastUtils.toast("数据添加成功，返回obejectId为:" + objectId);
+                } else {
+                    Log.d("BMOB", "创建数据失败: " + e.getMessage());
+                    XToastUtils.toast("创建数据失败: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void deleteAllMessage(){
+        List<BmobObject> delMessageLt = new ArrayList<>();
+        for (int i = 0; i < itemList.size(); i++){
+            Notification nf = new Notification();
+            nf.setObjectId(itemList.get(i).getObjectId());
+            delMessageLt.add(nf);
+        }
+
+        // 批量删除
+        new BmobBatch().deleteBatch(delMessageLt).doBatch(new QueryListListener<BatchResult>() {
+            @Override
+            public void done(List<BatchResult> results, BmobException e) {
+                if (e == null) {
+//                    for (int i = 0; i < results.size(); i++) {
+//                        BatchResult result = results.get(i);
+//                        BmobException ex = result.getError();
+//                        if (ex == null) {
+//                           XToastUtils.toast("第" + i + "个数据批量删除成功：" + result.getCreatedAt() + "," + result.getObjectId() + "," + result.getUpdatedAt());
+//                        } else {
+//                            XToastUtils.toast("第" + i + "个数据批量删除失败：" + ex.getMessage() + "," + ex.getErrorCode());
+//                        }
+//                    }
+                    itemList.clear();
+                    nAdapter.refresh(itemList);
+                } else {
+                    XToastUtils.toast("失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
     }
 }

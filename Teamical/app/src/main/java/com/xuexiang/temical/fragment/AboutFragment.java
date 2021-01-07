@@ -55,9 +55,9 @@ public class AboutFragment extends BaseFragment {
 
     @Override
     protected TitleBar initTitle() {
-        TitleBar titleBar = super.initTitle()
-                .setImmersive(true);
-        titleBar.setBackgroundColor(Color.TRANSPARENT);
+        TitleBar titleBar = super.initTitle();
+        titleBar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        titleBar.setTitle("关于");
         return titleBar;
     }
 
