@@ -17,6 +17,7 @@
 
 package com.xuexiang.temical.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -55,7 +57,11 @@ import com.xuexiang.temical.fragment.profile.ProfileFragment;
 import com.xuexiang.temical.fragment.TeamFragment;
 import com.xuexiang.temical.utils.Utils;
 import com.xuexiang.temical.utils.XToastUtils;
+import com.xuexiang.xaop.annotation.IOThread;
+import com.xuexiang.xaop.annotation.Permission;
 import com.xuexiang.xaop.annotation.SingleClick;
+import com.xuexiang.xaop.enums.ThreadType;
+import com.xuexiang.xqrcode.XQRCode;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
@@ -75,6 +81,8 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
+
+import static android.Manifest.permission_group.CAMERA;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener, ClickUtils.OnClick2ExitListener, Toolbar.OnMenuItemClickListener {
 
@@ -96,6 +104,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     DrawerLayout drawerLayout;
 
     private String[] mTitles;
+    static final int REQUEST_CODE = 111;
 
     @Override
     protected int getLayoutId() {
@@ -118,9 +127,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (item.getItemId()) {
             case R.id.action_scan:
                 //点击设置
+<<<<<<< HEAD
 //                XToastUtils.toast("点击了: 扫描");
 //                openNewPage(BackFontTestFragment.class);
                 doSearchATeam();
+=======
+                //XToastUtils.toast("点击了: 扫描");
+//                openNewPage(BackFontTestFragment.class);
+                XQRCode.startScan(this, REQUEST_CODE);
+>>>>>>> 70516ba2f9a20b0aab55fbde6caf5a21136d9bcc
                 break;
             case R.id.action_notifications:
                 openNewPage(NotificationFragment.class);
@@ -130,7 +145,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
         return false;
     };
+    @Permission(CAMERA)
+    @IOThread(ThreadType.Single)
+    private void startScan() {
 
+        XQRCode.startScan(this, REQUEST_CODE);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //处理二维码扫描结果
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            //处理扫描结果（在界面上显示）
+            handleScanResult(data);
+        }
+    }
+
+<<<<<<< HEAD
     private void doSearchATeam() {
         if (CurrentUser.getUserName().length() > 0) {
             new MaterialDialog.Builder(this)
@@ -227,6 +260,70 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         });
     }
+=======
+    private void handleScanResult(Intent data) {
+        if (data != null) {
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                if (bundle.getInt(XQRCode.RESULT_TYPE) == XQRCode.RESULT_SUCCESS) {
+                    String result = bundle.getString(XQRCode.RESULT_DATA);
+                    XToastUtils.toast("解析结果:" + result, Toast.LENGTH_LONG);
+                } else if (bundle.getInt(XQRCode.RESULT_TYPE) == XQRCode.RESULT_FAILED) {
+                    XToastUtils.toast("解析二维码失败", Toast.LENGTH_LONG);
+                }
+            }
+        }
+    }
+//    private void doSearchATeam() {
+//        if (CurrentUser.getUserName().length() > 0) {
+//            new MaterialDialog.Builder(this)
+//                    .iconRes(R.drawable.ic_team)
+//                    .title("申请加入加入团队")
+//                    .content("请依次输入您要加入的团队名称,团队负责人手机号,中间用-分开")
+//                    //                    .inputType(
+//                    //                            InputType.TYPE_CLASS_TEXT
+//                    //                                    | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+//                    //                                    | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+//                    .input(
+//                            "团队名称-团队负责人手机号",
+//                            "",
+//                            false,
+//                            ((dialog, input) -> Log.d("add a team", "申请消息"))
+//                    )
+//                    .positiveText("确认")
+//                    .negativeText("取消")
+//                    .onPositive((dialog, which) -> {
+//                        //                        XToastUtils.toast("你输入了:" + dialog.getInputEditText().getText().toString());
+//                        //                        itemList.add(new TeamCreate(dialog.getInputEditText().getText().toString()));
+//                        //                        mAdapter.refresh(itemList);
+//                        String input = dialog.getInputEditText().getText().toString();
+//                        doSubmitApply(input);
+//                    })
+//                    .cancelable(false)
+//                    .show();
+//        } else {
+//            XToastUtils.toast("请您先登录");
+//            openNewPage(LoginByPasswordFragment.class);
+//        }
+//    }
+
+//    private void doSubmitApply(String input) {
+//        try {
+//            String[] temp = input.split("-");
+//            String teamName = temp[0];
+//            String managerPN = temp[1];
+//            XToastUtils.toast("a: " + teamName + "*" + managerPN);
+//            if (teamName.length() <= 0 || managerPN.length() <= 0) {
+////                XToastUtils.toast("请您输入正确的格式.");
+//                return;
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+////            XToastUtils.toast("请您输入正确的格式");
+//        }
+//    }
+>>>>>>> 70516ba2f9a20b0aab55fbde6caf5a21136d9bcc
 
     @Override
     protected boolean isSupportSlideBack() {

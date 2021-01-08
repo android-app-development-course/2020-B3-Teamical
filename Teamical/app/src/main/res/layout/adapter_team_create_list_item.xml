@@ -59,7 +59,15 @@
                 tools:text="敏捷开发"
                 tools:ignore="RtlCompat" />
 
-        <!--            <TextView-->
+            <com.xuexiang.xui.widget.button.shadowbutton.ShadowImageView
+                android:id="@+id/tmv_qr"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right"
+                android:src="@drawable/ic_qr"
+                app:riv_is_circle="true" />
+
+            <!--            <TextView-->
         <!--                android:id="@+id/tv_tag"-->
         <!--                style="@style/TextStyle.Explain"-->
         <!--                android:layout_gravity="end|center_vertical"-->

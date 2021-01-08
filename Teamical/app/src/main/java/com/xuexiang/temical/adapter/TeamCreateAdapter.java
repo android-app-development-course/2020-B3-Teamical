@@ -1,6 +1,7 @@
 package com.xuexiang.temical.adapter;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 
@@ -8,9 +9,11 @@ import com.xuexiang.temical.R;
 import com.xuexiang.temical.adapter.entity.TeamCreate;
 import com.xuexiang.temical.adapter.entity.TeammateInfo;
 import com.xuexiang.temical.fragment.components.refresh.diffutil.DiffUtilCallback;
+import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.xui.adapter.recyclerview.BaseRecyclerAdapter;
 import com.xuexiang.xui.adapter.recyclerview.RecyclerViewHolder;
 import com.xuexiang.xui.utils.WidgetUtils;
+import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.common.logger.Logger;
 
@@ -53,15 +56,21 @@ public class TeamCreateAdapter extends BaseRecyclerAdapter<TeamCreate> {
         for (String key : payload.keySet()) {
             switch (key) {
                 case DiffUtilCallback.PAYLOAD_USER_NAME:
-                    //这里可以用payload里的数据，不过newInfo也是新的 也可以用
                     holder.text(R.id.team_create_name, teamCreate.getTeamName());
                     break;
                 case DiffUtilCallback.PAYLOAD_READ_NUMBER:
-//                    holder.text(R.id.tv_read, "阅读量 " + payload.getInt(DiffUtilCallback.PAYLOAD_READ_NUMBER));
                     break;
                 default:
                     break;
             }
         }
+        holder.getView(R.id.tmv_qr).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                XToastUtils.info(teamCreate.getTeamName()+"|"+teamCreate.getManagerPN());
+            }
+        });
     }
+
+
 }
