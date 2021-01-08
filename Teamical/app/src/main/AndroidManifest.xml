@@ -17,6 +17,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--允许读取手机状态 用于创建BmobInstallation-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--允许通知震动-->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <application
         android:name="com.xuexiang.temical.MyApp"
         android:allowBackup="false"
@@ -143,6 +146,8 @@
             android:exported="true"
             android:authorities="com.xuexiang.templateproject.BmobContentProvider">
         </provider>
+        <receiver android:name="com.xuexiang.temical.utils.service.receive_alarm" android:process=":remote"/>
+        <service android:name=".utils.service.alarm"/>
     </application>
 
 </manifest>

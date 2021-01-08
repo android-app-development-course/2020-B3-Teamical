@@ -72,66 +72,66 @@
                         app:sRightTextString="点击选择"
                         app:sRightViewMarginRight="0dp" />
 
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:id="@+id/stv_repeat"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        app:sDividerLineType="none"
+                    <!--                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView-->
+                    <!--                        android:id="@+id/stv_repeat"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="50dp"-->
+                    <!--                        app:sDividerLineType="none"-->
 
-                        app:sLeftTextString="重复"
-                        app:sLeftViewMarginLeft="35dp"
-                        app:sRightIconRes="@drawable/ic_arrow_right"
-                        app:sRightTextString="一次性活动"
-                        app:sRightViewMarginRight="0dp" />
+                    <!--                        app:sLeftTextString="重复"-->
+                    <!--                        app:sLeftViewMarginLeft="35dp"-->
+                    <!--                        app:sRightIconRes="@drawable/ic_arrow_right"-->
+                    <!--                        app:sRightTextString="一次性活动"-->
+                    <!--                        app:sRightViewMarginRight="0dp" />-->
 
 
                 </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@color/xui_config_color_white"
-                android:orientation="vertical">
-
-                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    android:id="@+id/super_team_event"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    app:sDividerLineType="both"
-
-                    app:sLeftTextString="团队日程"
-                    app:sLeftViewMarginLeft="35dp"
-                    app:sRightViewMarginRight="10dp"
-                    app:sRightViewType="switchBtn"
-                    app:sSwitchIsChecked="false"
-                    app:sThumbResource="@drawable/thumb"
-                    app:sTrackResource="@drawable/track" />
-
-                <com.xuexiang.xui.widget.layout.ExpandableLayout
-                    android:id="@+id/expandable_layout"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:background="@color/xui_config_color_white"
-                    app:el_duration="300"
-                    app:el_expanded="false">
+                    android:orientation="vertical">
 
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:id="@+id/stv_team"
+                        android:id="@+id/super_team_event"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        app:sDividerLineType="none"
+                        app:sDividerLineType="both"
 
-                        app:sLeftTextString="团队"
+                        app:sLeftTextString="团队日程"
                         app:sLeftViewMarginLeft="35dp"
-                        app:sRightIconRes="@drawable/ic_arrow_right"
-                        app:sRightTextString="选择团队"
-                        app:sRightViewMarginRight="0dp" />
+                        app:sRightViewMarginRight="10dp"
+                        app:sRightViewType="switchBtn"
+                        app:sSwitchIsChecked="false"
+                        app:sThumbResource="@drawable/thumb"
+                        app:sTrackResource="@drawable/track" />
+
+                    <com.xuexiang.xui.widget.layout.ExpandableLayout
+                        android:id="@+id/expandable_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/xui_config_color_white"
+                        app:el_duration="300"
+                        app:el_expanded="false">
+
+                        <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                            android:id="@+id/stv_team"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            app:sDividerLineType="none"
+
+                            app:sLeftTextString="团队"
+                            app:sLeftViewMarginLeft="35dp"
+                            app:sRightIconRes="@drawable/ic_arrow_right"
+                            app:sRightTextString="选择团队"
+                            app:sRightViewMarginRight="0dp" />
 
 
-                </com.xuexiang.xui.widget.layout.ExpandableLayout>
+                    </com.xuexiang.xui.widget.layout.ExpandableLayout>
 
-            </LinearLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -165,10 +165,6 @@
                         app:sSwitchIsChecked="true"
                         app:sThumbResource="@drawable/thumb"
                         app:sTrackResource="@drawable/track" />
-
-
-
-
                 </LinearLayout>
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

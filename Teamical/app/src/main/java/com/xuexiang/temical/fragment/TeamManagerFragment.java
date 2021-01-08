@@ -181,7 +181,7 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
 //        getDemoData();
         getTeammateFromServer(teamName, managerPN);
         // 只有管理员才有操作权限
-        if (managerPN.equals(CurrentUser.getPhoneNum())) {
+        if (managerPN.equals(CurrentUser.getPhoneNum()) && itemList.size() > 0) {
             initListViewListener();
         }
 

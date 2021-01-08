@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             switch (item.getItemId()) {
                 case R.id.action_scan:
                     //XToastUtils.toast("点击了: 扫描");
-//                doSearchATeam();
+//                    doSearchATeamByDialog();
                     XQRCode.startScan(this, REQUEST_CODE);
                     break;
                 case R.id.action_notifications:
@@ -148,9 +148,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     @Permission(CAMERA)
     @IOThread(ThreadType.Single)
     private void startScan() {
-
         XQRCode.startScan(this, REQUEST_CODE);
-
     }
 
     @Override
