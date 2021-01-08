@@ -47,7 +47,6 @@ import com.xuexiang.temical.fragment.ComplexCalendarFragment;
 import com.xuexiang.temical.fragment.LoginByPasswordFragment;
 import com.xuexiang.temical.fragment.NewEventFragment;
 import com.xuexiang.temical.fragment.NotificationFragment;
-import com.xuexiang.temical.fragment.SettingsFragment;
 import com.xuexiang.temical.fragment.StatisticsFragment;
 import com.xuexiang.temical.fragment.TeamApplyMessageListFragment;
 import com.xuexiang.temical.fragment.TeamManagerFragment;
@@ -64,6 +63,8 @@ import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
+import com.xuexiang.xui.widget.guidview.GuideCaseQueue;
+import com.xuexiang.xui.widget.guidview.GuideCaseView;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xutil.XUtil;
 import com.xuexiang.xutil.app.ActivityUtils;
@@ -275,25 +276,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 return handleNavigationItemSelected(menuItem);
             } else {
                 switch (menuItem.getItemId()) {
-                    case R.id.nav_settings:
-                        openNewPage(SettingsFragment.class);
-                        break;
                     case R.id.nav_about:
                         openNewPage(AboutFragment.class);
                         break;
                     case R.id.nav_statistics:
                         openNewPage(StatisticsFragment.class);
                         break;
-                    case R.id.nav_search:
-                        // Todo: 拿来试验试验,到时记得删掉
-                        openNewPage(TeamManagerFragment.class);
-                        break;
                     case R.id.nav_notifications:
                         // Todo: 拿来试验试验,到时记得删掉
                         openNewPage(TeamManagerFragment.class);
-                        break;
-                    case R.id.nav_starred:
-                        openNewPage(BackFontTestFragment.class);
                         break;
                     default:
                         XToastUtils.toast("点击了:" + menuItem.getTitle());

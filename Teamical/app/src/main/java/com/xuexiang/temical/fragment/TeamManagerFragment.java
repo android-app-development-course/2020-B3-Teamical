@@ -74,7 +74,6 @@ import com.xuexiang.temical.adapter.entity.Teammate;
 import com.xuexiang.temical.adapter.entity.TeammateInfo;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.HanziToPinyin;
-import com.xuexiang.temical.utils.SettingUtils;
 import com.xuexiang.temical.utils.Utils;
 import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.temical.widget.SideBar;

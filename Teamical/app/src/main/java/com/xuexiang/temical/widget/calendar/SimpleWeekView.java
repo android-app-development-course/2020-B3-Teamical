@@ -28,10 +28,6 @@ import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.WeekView;
 import com.xuexiang.xui.utils.DensityUtils;
 
-/**
- * @author xuexiang
- * @since 2019-06-27 16:30
- */
 public class SimpleWeekView extends WeekView {
 
     private int mRadius;
