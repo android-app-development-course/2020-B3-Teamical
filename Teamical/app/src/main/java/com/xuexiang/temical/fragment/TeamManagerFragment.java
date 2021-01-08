@@ -156,8 +156,8 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
             initListViewListener();
         }
 
-        QRCodeProduceUtils.Builder builder = XQRCode.newQRCodeBuilder(teamName+"|"+managerPN);
-        qrcode.setImageBitmap(builder.build());
+        //QRCodeProduceUtils.Builder builder = XQRCode.newQRCodeBuilder(teamName +"#"+ managerPN).setSize(400);
+        qrcode.setImageBitmap(XQRCode.createQRCodeWithLogo(teamName +"#"+ managerPN,null));
     }
 
     @SuppressLint("ClickableViewAccessibility")
