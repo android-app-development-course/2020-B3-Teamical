@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 数据库服务
+        // 云数据库服务
         Bmob.initialize(this, "4a6d691cfdb623ee87f8c99605ea55ad");
 
         initViews();
@@ -124,27 +124,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     Toolbar.OnMenuItemClickListener menuItemClickListener = item -> {
 //        XToastUtils.toast("点击了:" + item.getTitle());
-        switch (item.getItemId()) {
-            case R.id.action_scan:
-                //点击设置
-<<<<<<< HEAD
-//                XToastUtils.toast("点击了: 扫描");
-//                openNewPage(BackFontTestFragment.class);
-                doSearchATeam();
-=======
-                //XToastUtils.toast("点击了: 扫描");
-//                openNewPage(BackFontTestFragment.class);
-                XQRCode.startScan(this, REQUEST_CODE);
->>>>>>> 70516ba2f9a20b0aab55fbde6caf5a21136d9bcc
-                break;
-            case R.id.action_notifications:
-                openNewPage(NotificationFragment.class);
+        if (CurrentUser.getUserName().length() > 0) {
+            switch (item.getItemId()) {
+                case R.id.action_scan:
+                    //XToastUtils.toast("点击了: 扫描");
+//                doSearchATeam();
+                    XQRCode.startScan(this, REQUEST_CODE);
+                    break;
+                case R.id.action_notifications:
+                    openNewPage(NotificationFragment.class);
 //                XToastUtils.toast("点击了: 通知");
-            default:
-                break;
+                default:
+                    break;
+            }
+        } else {
+            XToastUtils.toast("请您先登录");
+            openNewPage(LoginByPasswordFragment.class);
         }
         return false;
     };
+
     @Permission(CAMERA)
     @IOThread(ThreadType.Single)
     private void startScan() {
@@ -163,8 +162,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-<<<<<<< HEAD
-    private void doSearchATeam() {
+    // 搜索团队
+    private void doSearchATeamByDialog() {
         if (CurrentUser.getUserName().length() > 0) {
             new MaterialDialog.Builder(this)
                     .iconRes(R.drawable.ic_team)
@@ -187,7 +186,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                         //                        itemList.add(new TeamCreate(dialog.getInputEditText().getText().toString()));
                         //                        mAdapter.refresh(itemList);
                         String input = dialog.getInputEditText().getText().toString();
-                        doSubmitApply(input);
+                        doSubmitApplyByDialog(input);
                     })
                     .cancelable(false)
                     .show();
@@ -197,11 +196,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    private void doSubmitApply(String input) {
+    private void doSubmitApplyByDialog(String input) {
         try {
 //            XToastUtils.toast(input);
             String[] temp = input.split("#");
-            if (temp.length < 2){
+            if (temp.length < 2) {
                 XToastUtils.toast("请您输入正确的格式");
                 return;
             }
@@ -217,7 +216,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
     }
 
-    private void findATeam(String teamName, String managerPN){
+    private void doSubmitApplyByQR(String input) {
+        try {
+//            XToastUtils.toast(input);
+            String[] temp = input.split("#");
+            String teamName = temp[0];
+            String managerPN = temp[1];
+//            XToastUtils.toast("a: " + teamName + "#" + managerPN);
+            // 找到才会发送申请消息，找不到提示没有这个团队
+            findATeam(teamName, managerPN);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("scan ", e.getMessage());
+            XToastUtils.toast("扫描出错!");
+        }
+    }
+
+    private void findATeam(String teamName, String managerPN) {
         BmobQuery<TeamCreate> categoryBmobQuery = new BmobQuery<>();
         categoryBmobQuery.addWhereEqualTo("TeamName", teamName);
         categoryBmobQuery.addWhereEqualTo("ManagerPN", managerPN);
@@ -226,10 +241,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             public void done(List<TeamCreate> object, BmobException e) {
                 if (e == null) {
 //                    XToastUtils.toast("查询成功：" + object.get(0).getManagerPN());
-                    if (object.size() > 0){
+                    XToastUtils.toast("object.size: " + object.size());
+                    if (object.size() > 0) {
                         addAMessage(teamName, managerPN);
                     } else {
-                        XToastUtils.toast("找不到该团队");
+                        XToastUtils.toast("找不到该团队" + teamName + managerPN);
                     }
                 } else {
                     Log.e("BMOB", e.toString());
@@ -240,7 +256,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
 
-    private void addAMessage(String teamName, String managerPN){
+    private void addAMessage(String teamName, String managerPN) {
         Notification nf = new Notification();
         nf.setTeamName(teamName);
         nf.setCheckerPN(managerPN);
@@ -260,7 +276,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             }
         });
     }
-=======
+
     private void handleScanResult(Intent data) {
         if (data != null) {
             Bundle bundle = data.getExtras();
@@ -268,62 +284,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                 if (bundle.getInt(XQRCode.RESULT_TYPE) == XQRCode.RESULT_SUCCESS) {
                     String result = bundle.getString(XQRCode.RESULT_DATA);
                     XToastUtils.toast("解析结果:" + result, Toast.LENGTH_LONG);
+                    doSubmitApplyByQR(result);
                 } else if (bundle.getInt(XQRCode.RESULT_TYPE) == XQRCode.RESULT_FAILED) {
                     XToastUtils.toast("解析二维码失败", Toast.LENGTH_LONG);
                 }
             }
         }
     }
-//    private void doSearchATeam() {
-//        if (CurrentUser.getUserName().length() > 0) {
-//            new MaterialDialog.Builder(this)
-//                    .iconRes(R.drawable.ic_team)
-//                    .title("申请加入加入团队")
-//                    .content("请依次输入您要加入的团队名称,团队负责人手机号,中间用-分开")
-//                    //                    .inputType(
-//                    //                            InputType.TYPE_CLASS_TEXT
-//                    //                                    | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-//                    //                                    | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
-//                    .input(
-//                            "团队名称-团队负责人手机号",
-//                            "",
-//                            false,
-//                            ((dialog, input) -> Log.d("add a team", "申请消息"))
-//                    )
-//                    .positiveText("确认")
-//                    .negativeText("取消")
-//                    .onPositive((dialog, which) -> {
-//                        //                        XToastUtils.toast("你输入了:" + dialog.getInputEditText().getText().toString());
-//                        //                        itemList.add(new TeamCreate(dialog.getInputEditText().getText().toString()));
-//                        //                        mAdapter.refresh(itemList);
-//                        String input = dialog.getInputEditText().getText().toString();
-//                        doSubmitApply(input);
-//                    })
-//                    .cancelable(false)
-//                    .show();
-//        } else {
-//            XToastUtils.toast("请您先登录");
-//            openNewPage(LoginByPasswordFragment.class);
-//        }
-//    }
-
-//    private void doSubmitApply(String input) {
-//        try {
-//            String[] temp = input.split("-");
-//            String teamName = temp[0];
-//            String managerPN = temp[1];
-//            XToastUtils.toast("a: " + teamName + "*" + managerPN);
-//            if (teamName.length() <= 0 || managerPN.length() <= 0) {
-////                XToastUtils.toast("请您输入正确的格式.");
-//                return;
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-////            XToastUtils.toast("请您输入正确的格式");
-//        }
-//    }
->>>>>>> 70516ba2f9a20b0aab55fbde6caf5a21136d9bcc
 
     @Override
     protected boolean isSupportSlideBack() {

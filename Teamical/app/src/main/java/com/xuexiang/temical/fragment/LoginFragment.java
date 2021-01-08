@@ -130,16 +130,18 @@ public class LoginFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_get_verify_code:
-                if (etPhoneNumber.validate()) {
-                    getVerifyCode(etPhoneNumber.getEditValue());
-                }
+//                if (etPhoneNumber.validate()) {
+//                    getVerifyCode(etPhoneNumber.getEditValue());
+//                }
+                XToastUtils.toast("暂时不支持验证码登录");
                 break;
             case R.id.btn_login:
-                if (etPhoneNumber.validate()) {
-                    if (etVerifyCode.validate()) {
-                        loginByVerifyCode(etPhoneNumber.getEditValue(), etVerifyCode.getEditValue());
-                    }
-                }
+//                if (etPhoneNumber.validate()) {
+//                    if (etVerifyCode.validate()) {
+//                        loginByVerifyCode(etPhoneNumber.getEditValue(), etVerifyCode.getEditValue());
+//                    }
+//                }
+                XToastUtils.toast("暂时不支持验证码登录");
                 break;
             case R.id.tv_other_login:
                 XToastUtils.info("其他登录方式");

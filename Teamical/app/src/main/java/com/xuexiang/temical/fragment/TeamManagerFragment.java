@@ -69,6 +69,7 @@ import com.xuexiang.temical.adapter.TeammateViewListAdapter;
 import com.xuexiang.temical.adapter.entity.Contact;
 import com.xuexiang.temical.adapter.entity.CurrentUser;
 import com.xuexiang.temical.adapter.entity.NewInfo;
+import com.xuexiang.temical.adapter.entity.Notification;
 import com.xuexiang.temical.adapter.entity.TeamCreate;
 import com.xuexiang.temical.adapter.entity.Teammate;
 import com.xuexiang.temical.adapter.entity.TeammateInfo;
@@ -91,9 +92,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.bmob.v3.BmobBatch;
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BatchResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 import static com.github.mikephil.charting.animation.Easing.EasingOption.EaseInOutQuad;
@@ -105,7 +110,7 @@ import static com.github.mikephil.charting.animation.Easing.EasingOption.EaseInO
 @Page(name = "团队成员管理")
 public class TeamManagerFragment extends BaseFragment implements SideBar
         .OnTouchingLetterChangedListener, TextWatcher {
-//    @BindView(R.id.toolbar_teammate_manage_view)
+    //    @BindView(R.id.toolbar_teammate_manage_view)
 //    Toolbar toolbar;
     @BindView(R.id.school_friend_sidrbar)
     SideBar mSideBar;
@@ -144,7 +149,8 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
             titleBar.addAction(new TitleBar.ImageAction(R.drawable.ic_dustbin) {
                 @Override
                 public void performAction(View view) {
-                    XToastUtils.toast("解散团队");
+//                    XToastUtils.toast("解散团队");
+                    showSimpleConfirmDialog(teamName, managerPN);
                 }
             });
         }
@@ -174,14 +180,8 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
 
 //        getDemoData();
         getTeammateFromServer(teamName, managerPN);
-        if (managerPN.equals(CurrentUser.getPhoneNum())) {
-            // 只有队伍里至少有一人才需要监听
-            if (itemList.size() > 0) {
-                initListViewListener();
-            }
-        }
 
-        QRCodeProduceUtils.Builder builder = XQRCode.newQRCodeBuilder(teamName+"|"+managerPN);
+        QRCodeProduceUtils.Builder builder = XQRCode.newQRCodeBuilder(teamName + "#" + managerPN);
         qrcode.setImageBitmap(builder.build());
     }
 
@@ -190,6 +190,7 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
         mListView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
+
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_UP: {
                         mDialog.setVisibility(View.INVISIBLE);
@@ -213,7 +214,7 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String opTeammateName = datas.get(i).getName();
-                XToastUtils.toast("item: " + opTeammateName);
+//                XToastUtils.toast("item: " + opTeammateName);
 
                 showSimpleBottomSheetGrid(opTeammateName);
             }
@@ -270,6 +271,9 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
     @Override
     protected void initListeners() {
 //        toolbar.setNavigationOnClickListener(v -> popToBack());
+        if (managerPN.equals(CurrentUser.getPhoneNum()) && itemList.size() > 0) {
+            initListViewListener();
+        }
     }
 
 
@@ -333,6 +337,10 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
                     itemList.clear();
                     // 将所有object装进去
                     itemList.addAll(objectLt);
+                    if (managerPN.equals(CurrentUser.getPhoneNum()) && itemList.size() > 0) {
+                        initListViewListener();
+                    }
+
                     // 进行后续操作
                     parserTeammateName();
                 } else {
@@ -358,10 +366,153 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
                         }
                     }
                 });
+                // 删完就退出页面，反之出错
+                if (itemList.size() <= 1) {
+                    this.popToBack();
+                }
                 getTeammateFromServer(teamName, managerPN);
                 break;
             }
         }
+    }
+
+    private void showSimpleConfirmDialog(String teamName, String managerPN) {
+        new MaterialDialog.Builder(getContext())
+                .content("是否确认解散团队?")
+                .positiveText(R.string.lab_yes)
+                .negativeText(R.string.lab_no)
+                .onPositive((dialog, which) -> {
+                    doDisbandGroup(teamName, managerPN);
+//                    this.popToBack();
+                })
+                .show();
+    }
+
+    private void doDisbandGroup(String teamName, String managerPN) {
+        // 在teammate表中删除改团队所有成员的成员记录
+        delGroupTeammate(teamName, managerPN);
+        // 在TeamCreate表中删除该团队记录
+        delATeam(teamName, managerPN);
+        // 在申请消息表Notification中删除申请该团队的消息
+        delMessage(teamName, managerPN);
+        this.popToBack();
+    }
+
+    private void delGroupTeammate(String teamName, String managerPN) {
+        List<BmobObject> delTeammateLt = new ArrayList<>();
+        BmobQuery<Teammate> categoryBmobQuery = new BmobQuery<>();
+        categoryBmobQuery.addWhereEqualTo("TeamName", teamName);
+        categoryBmobQuery.addWhereEqualTo("ManagerPN", managerPN);
+        categoryBmobQuery.findObjects(new FindListener<Teammate>() {
+            @Override
+            public void done(List<Teammate> objectLt, BmobException e) {
+                if (e == null) {
+                    for (int i = 0; i < objectLt.size(); i++) {
+                        Teammate tm = new Teammate();
+                        tm.setObjectId(objectLt.get(i).getObjectId());
+                        delTeammateLt.add(tm);
+                    }
+                    // System.out.println("objectLt.size(): " + objectLt.size());
+                    // 批量删除
+                    doBatchDeleteTeammate(delTeammateLt);
+                } else {
+                    Log.e("BMOB", e.getMessage());
+//                    XToastUtils.toast(e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void doBatchDeleteTeammate(List<BmobObject> delTeammateLt) {
+        // 批量删除
+        new BmobBatch().deleteBatch(delTeammateLt).doBatch(new QueryListListener<BatchResult>() {
+            @Override
+            public void done(List<BatchResult> results, BmobException e) {
+                if (e == null) {
+//                    XToastUtils.toast("删除团队成员成功");
+                    Log.d("delTeammate", "删除团队成员成功");
+                } else {
+//                    XToastUtils.toast("失败：" + e.getMessage() + "," + e.getErrorCode());
+                    Log.e("delTeammate: ", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
+    }
+
+    private void delATeam(String teamName, String managerPN) {
+        TeamCreate tc = new TeamCreate();
+        BmobQuery<TeamCreate> categoryBmobQuery = new BmobQuery<>();
+        categoryBmobQuery.addWhereEqualTo("TeamName", teamName);
+        categoryBmobQuery.addWhereEqualTo("ManagerPN", managerPN);
+        categoryBmobQuery.findObjects(new FindListener<TeamCreate>() {
+            @Override
+            public void done(List<TeamCreate> objectLt, BmobException e) {
+                if (e == null) {
+                    // 由于业务逻辑中保持了同个用户名下不能有同名，故查询结果只会有一个
+                    tc.setObjectId(objectLt.get(0).getObjectId());
+                    // 删除这个团队
+                    delATeamByObejectId(tc);
+                } else {
+                    Log.e("BMOB", e.getMessage());
+//                    XToastUtils.toast(e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void delATeamByObejectId(TeamCreate tc) {
+        tc.delete(new UpdateListener() {
+            @Override
+            public void done(BmobException e) {
+                if (e == null) {
+                    // u1.getUpdatedAt()返回null
+//                    XToastUtils.toast("删除团队成功");
+                    Log.d("delTeamcreate", "删除团队成员成功");
+                } else {
+//                    XToastUtils.toast("删除失败：" + e.getMessage());
+                    Log.e("del teamcreate: ", "删除失败：" + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void delMessage(String teamName, String managerPN) {
+        List<BmobObject> delMessage = new ArrayList<>();
+        BmobQuery<Notification> categoryBmobQuery = new BmobQuery<>();
+        categoryBmobQuery.addWhereEqualTo("TeamName", teamName);
+        categoryBmobQuery.addWhereEqualTo("CheckerPN", managerPN);
+        categoryBmobQuery.findObjects(new FindListener<Notification>() {
+            @Override
+            public void done(List<Notification> objectLt, BmobException e) {
+                if (e == null) {
+                    for (int i = 0; i < objectLt.size(); i++) {
+                        Notification nf = new Notification();
+                        nf.setObjectId(objectLt.get(i).getObjectId());
+                        delMessage.add(nf);
+                    }
+                    // 批量删除
+                    doBatchDeleteMessage(delMessage);
+                } else {
+                    Log.e("BMOB", e.getMessage());
+//                    XToastUtils.toast(e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void doBatchDeleteMessage(List<BmobObject> delMessage) {
+        new BmobBatch().deleteBatch(delMessage).doBatch(new QueryListListener<BatchResult>() {
+            @Override
+            public void done(List<BatchResult> results, BmobException e) {
+                if (e == null) {
+//                    XToastUtils.toast("删除团队申请成功");
+                    Log.d("del notification", "删除团队成员成功");
+                } else {
+//                    XToastUtils.toast("失败：" + e.getMessage() + "," + e.getErrorCode());
+                    Log.e("del notification", "失败：" + e.getMessage() + "," + e.getErrorCode());
+                }
+            }
+        });
     }
 }
 
