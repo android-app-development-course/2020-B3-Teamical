@@ -36,6 +36,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.xuexiang.temical.R;
 import com.xuexiang.temical.adapter.entity.CurrentUser;
+import com.xuexiang.temical.adapter.entity.Notification;
+import com.xuexiang.temical.adapter.entity.TeamCreate;
 import com.xuexiang.temical.adapter.entity.User;
 import com.xuexiang.temical.core.BaseActivity;
 import com.xuexiang.temical.core.BaseFragment;
@@ -65,9 +67,13 @@ import com.xuexiang.xutil.common.ClickUtils;
 import com.xuexiang.xutil.common.CollectionUtils;
 import com.xuexiang.xutil.display.Colors;
 
+import java.util.List;
+
 import butterknife.BindView;
 import cn.bmob.v3.Bmob;
+import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener, ClickUtils.OnClick2ExitListener, Toolbar.OnMenuItemClickListener {
@@ -112,9 +118,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (item.getItemId()) {
             case R.id.action_scan:
                 //点击设置
-                XToastUtils.toast("点击了: 扫描");
+//                XToastUtils.toast("点击了: 扫描");
 //                openNewPage(BackFontTestFragment.class);
-//                doSearchATeam();
+                doSearchATeam();
                 break;
             case R.id.action_notifications:
                 openNewPage(NotificationFragment.class);
@@ -125,55 +131,102 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         return false;
     };
 
-//    private void doSearchATeam() {
-//        if (CurrentUser.getUserName().length() > 0) {
-//            new MaterialDialog.Builder(this)
-//                    .iconRes(R.drawable.ic_team)
-//                    .title("申请加入加入团队")
-//                    .content("请依次输入您要加入的团队名称,团队负责人手机号,中间用-分开")
-//                    //                    .inputType(
-//                    //                            InputType.TYPE_CLASS_TEXT
-//                    //                                    | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-//                    //                                    | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
-//                    .input(
-//                            "团队名称-团队负责人手机号",
-//                            "",
-//                            false,
-//                            ((dialog, input) -> Log.d("add a team", "申请消息"))
-//                    )
-//                    .positiveText("确认")
-//                    .negativeText("取消")
-//                    .onPositive((dialog, which) -> {
-//                        //                        XToastUtils.toast("你输入了:" + dialog.getInputEditText().getText().toString());
-//                        //                        itemList.add(new TeamCreate(dialog.getInputEditText().getText().toString()));
-//                        //                        mAdapter.refresh(itemList);
-//                        String input = dialog.getInputEditText().getText().toString();
-//                        doSubmitApply(input);
-//                    })
-//                    .cancelable(false)
-//                    .show();
-//        } else {
-//            XToastUtils.toast("请您先登录");
-//            openNewPage(LoginByPasswordFragment.class);
-//        }
-//    }
+    private void doSearchATeam() {
+        if (CurrentUser.getUserName().length() > 0) {
+            new MaterialDialog.Builder(this)
+                    .iconRes(R.drawable.ic_team)
+                    .title("申请加入加入团队")
+                    .content("请依次输入您要加入的团队名称,团队负责人手机号,中间用英文的#分开")
+                    //                    .inputType(
+                    //                            InputType.TYPE_CLASS_TEXT
+                    //                                    | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                    //                                    | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                    .input(
+                            "团队名称#团队负责人手机号",
+                            "",
+                            false,
+                            ((dialog, input) -> Log.d("add a team", "申请消息"))
+                    )
+                    .positiveText("确认")
+                    .negativeText("取消")
+                    .onPositive((dialog, which) -> {
+                        //                        XToastUtils.toast("你输入了:" + dialog.getInputEditText().getText().toString());
+                        //                        itemList.add(new TeamCreate(dialog.getInputEditText().getText().toString()));
+                        //                        mAdapter.refresh(itemList);
+                        String input = dialog.getInputEditText().getText().toString();
+                        doSubmitApply(input);
+                    })
+                    .cancelable(false)
+                    .show();
+        } else {
+            XToastUtils.toast("请您先登录");
+            openNewPage(LoginByPasswordFragment.class);
+        }
+    }
 
-//    private void doSubmitApply(String input) {
-//        try {
-//            String[] temp = input.split("-");
-//            String teamName = temp[0];
-//            String managerPN = temp[1];
-//            XToastUtils.toast("a: " + teamName + "*" + managerPN);
-//            if (teamName.length() <= 0 || managerPN.length() <= 0) {
-////                XToastUtils.toast("请您输入正确的格式.");
-//                return;
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-////            XToastUtils.toast("请您输入正确的格式");
-//        }
-//    }
+    private void doSubmitApply(String input) {
+        try {
+//            XToastUtils.toast(input);
+            String[] temp = input.split("#");
+            if (temp.length < 2){
+                XToastUtils.toast("请您输入正确的格式");
+                return;
+            }
+            String teamName = temp[0];
+            String managerPN = temp[1];
+//            XToastUtils.toast("a: " + teamName + "#" + managerPN);
+            // 找到才会发送申请消息，找不到提示没有这个团队
+            findATeam(teamName, managerPN);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("scan ", e.getMessage());
+//            XToastUtils.toast("格式输入有误");
+        }
+    }
+
+    private void findATeam(String teamName, String managerPN){
+        BmobQuery<TeamCreate> categoryBmobQuery = new BmobQuery<>();
+        categoryBmobQuery.addWhereEqualTo("TeamName", teamName);
+        categoryBmobQuery.addWhereEqualTo("ManagerPN", managerPN);
+        categoryBmobQuery.findObjects(new FindListener<TeamCreate>() {
+            @Override
+            public void done(List<TeamCreate> object, BmobException e) {
+                if (e == null) {
+//                    XToastUtils.toast("查询成功：" + object.get(0).getManagerPN());
+                    if (object.size() > 0){
+                        addAMessage(teamName, managerPN);
+                    } else {
+                        XToastUtils.toast("找不到该团队");
+                    }
+                } else {
+                    Log.e("BMOB", e.toString());
+                    XToastUtils.toast("查找出错");
+                }
+            }
+        });
+    }
+
+
+    private void addAMessage(String teamName, String managerPN){
+        Notification nf = new Notification();
+        nf.setTeamName(teamName);
+        nf.setCheckerPN(managerPN);
+        nf.setUserName(CurrentUser.getUserName());
+        nf.setApplicantPN(CurrentUser.getPhoneNum());
+        nf.setStatus("待审核");
+        nf.save(new SaveListener<String>() {
+            @Override
+            public void done(String objectId, BmobException e) {
+                if (e == null) {
+//                    XToastUtils.toast("数据添加成功，返回obejectId为:" + objectId);
+                    XToastUtils.toast("申请消息已发送");
+                } else {
+                    Log.d("warning", "创建数据失败: " + e.getMessage());
+                    XToastUtils.toast("创建数据失败: " + e.getMessage());
+                }
+            }
+        });
+    }
 
     @Override
     protected boolean isSupportSlideBack() {

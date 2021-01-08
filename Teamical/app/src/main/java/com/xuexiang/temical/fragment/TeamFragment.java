@@ -149,7 +149,7 @@ public class TeamFragment extends BaseFragment {
                                 "请输入您要创建的团队名称",
                                 "",
                                 false,
-                                ((dialog, input) -> XToastUtils.toast("团队创建成功"))
+                                ((dialog, input) -> Log.d("create a team", "尝试创建一个团队"))
                         )
                         .positiveText("确认")
                         .negativeText("取消")
@@ -158,8 +158,8 @@ public class TeamFragment extends BaseFragment {
                             //                        itemList.add(new TeamCreate(dialog.getInputEditText().getText().toString()));
                             //                        mAdapter.refresh(itemList);
                             String teamName = dialog.getInputEditText().getText().toString();
-                            // 新建一个团队
-                            newATeam(teamName, CurrentUser.getPhoneNum());
+                            // 若该用户管理的团队中没有同名的团队即可创建
+                            searchATeamByManager(teamName);
                             getTeamFromServer();
                         })
                         .cancelable(false)
@@ -256,16 +256,39 @@ public class TeamFragment extends BaseFragment {
         });
     }
 
-    private void newATeam(String teamName, String managerPN) {
+    private void searchATeamByManager(String teamName){
+        BmobQuery<TeamCreate> categoryBmobQuery = new BmobQuery<>();
+        categoryBmobQuery.addWhereEqualTo("TeamName", teamName);
+        categoryBmobQuery.addWhereEqualTo("ManagerPN", CurrentUser.getPhoneNum());
+        categoryBmobQuery.findObjects(new FindListener<TeamCreate>() {
+            @Override
+            public void done(List<TeamCreate> object, BmobException e) {
+                if (e == null) {
+//                    XToastUtils.toast("查询成功：" + object.get(0).getManagerPN());
+                    if (object.size() > 0){
+                        XToastUtils.toast("您名下已经有同名的团队了");
+                    } else {
+                        newATeam(teamName);
+                    }
+                } else {
+                    Log.e("BMOB", e.toString());
+                    XToastUtils.toast("创建出错");
+                }
+            }
+        });
+    }
+
+    private void newATeam(String teamName) {
         TeamCreate t1 = new TeamCreate();
         t1.setTeamName(teamName);
-        t1.setManagerPN(managerPN);
+        t1.setManagerPN(CurrentUser.getPhoneNum());
 
         t1.save(new SaveListener<String>() {
             @Override
             public void done(String objectId, BmobException e) {
                 if (e == null) {
-                    XToastUtils.toast("数据添加成功，返回obejectId为:" + objectId);
+//                    XToastUtils.toast("数据添加成功，返回obejectId为:" + objectId);
+                    XToastUtils.toast("新建团队成功");
                 } else {
                     Log.d("BMOB", "创建数据失败: " + e.getMessage());
                     XToastUtils.toast("创建数据失败: " + e.getMessage());

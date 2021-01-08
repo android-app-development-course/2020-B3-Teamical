@@ -102,8 +102,8 @@ import static com.github.mikephil.charting.animation.Easing.EasingOption.EaseInO
 @Page(name = "团队成员管理")
 public class TeamManagerFragment extends BaseFragment implements SideBar
         .OnTouchingLetterChangedListener, TextWatcher {
-    @BindView(R.id.toolbar_teammate_manage_view)
-    Toolbar toolbar;
+//    @BindView(R.id.toolbar_teammate_manage_view)
+//    Toolbar toolbar;
     @BindView(R.id.school_friend_sidrbar)
     SideBar mSideBar;
     @BindView(R.id.school_friend_dialog)
@@ -124,6 +124,28 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
     String teamName;
     // 当前访问的团队负责人的手机号
     String managerPN;
+
+    @Override
+    protected TitleBar initTitle() {
+        Bundle arguments = getArguments().getBundle("key");
+        teamName = arguments.getString("TeamName");
+        managerPN = arguments.getString("ManagerPN");
+
+        TitleBar titleBar = super.initTitle();
+        titleBar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        titleBar.setTitle(teamName);
+        titleBar.setHeight(200);
+        if (managerPN.equals(CurrentUser.getPhoneNum())) {
+            titleBar.addAction(new TitleBar.ImageAction(R.drawable.ic_dustbin) {
+                @Override
+                public void performAction(View view) {
+                    XToastUtils.toast("解散团队");
+                }
+            });
+        }
+        return titleBar;
+//        return null;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -147,9 +169,11 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
 
 //        getDemoData();
         getTeammateFromServer(teamName, managerPN);
-        // 只有管理员才有操作权限
         if (managerPN.equals(CurrentUser.getPhoneNum())) {
-            initListViewListener();
+            // 只有队伍里至少有一人才需要监听
+            if (itemList.size() > 0) {
+                initListViewListener();
+            }
         }
     }
 
@@ -236,14 +260,8 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
     }
 
     @Override
-    protected TitleBar initTitle() {
-        return null;
-    }
-
-
-    @Override
     protected void initListeners() {
-        toolbar.setNavigationOnClickListener(v -> popToBack());
+//        toolbar.setNavigationOnClickListener(v -> popToBack());
     }
 
 

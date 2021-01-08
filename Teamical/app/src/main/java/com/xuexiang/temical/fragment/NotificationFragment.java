@@ -272,7 +272,8 @@ public class NotificationFragment extends BaseFragment {
             @Override
             public void done(String objectId, BmobException e) {
                 if (e == null) {
-                    XToastUtils.toast("数据添加成功，返回obejectId为:" + objectId);
+//                    XToastUtils.toast("数据添加成功，返回obejectId为:" + objectId);
+                    XToastUtils.toast("该成员通过审核加入团队");
                 } else {
                     Log.d("BMOB", "创建数据失败: " + e.getMessage());
                     XToastUtils.toast("创建数据失败: " + e.getMessage());
