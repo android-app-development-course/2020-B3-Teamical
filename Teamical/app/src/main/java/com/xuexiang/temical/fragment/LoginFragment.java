@@ -31,7 +31,6 @@ import com.xuexiang.temical.activity.LoginActivity;
 import com.xuexiang.temical.activity.MainActivity;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.utils.RandomUtils;
-import com.xuexiang.temical.utils.SettingUtils;
 import com.xuexiang.temical.utils.TokenUtils;
 import com.xuexiang.temical.utils.Utils;
 import com.xuexiang.temical.utils.XToastUtils;
@@ -111,13 +110,6 @@ public class LoginFragment extends BaseFragment {
     protected void initViews() {
         mCountDownHelper = new CountDownButtonHelper(btnGetVerifyCode, 60);
 
-        //隐私政策弹窗
-        if (!SettingUtils.isAgreePrivacy()) {
-            Utils.showPrivacyDialog(getContext(), (dialog, which) -> {
-                dialog.dismiss();
-                SettingUtils.setIsAgreePrivacy(true);
-            });
-        }
 
         // 对话框
         mLoadingDialog = WidgetUtils.getLoadingDialog(getContext())
@@ -212,7 +204,6 @@ public class LoginFragment extends BaseFragment {
                     });
                 }
                 else{
-                    TokenUtils.handleLoginSuccess(null);
                 }
             }
         });

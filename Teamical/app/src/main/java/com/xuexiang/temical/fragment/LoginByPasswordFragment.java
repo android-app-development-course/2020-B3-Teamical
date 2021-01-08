@@ -32,6 +32,7 @@ import com.xuexiang.temical.adapter.entity.CurrentUser;
 import com.xuexiang.temical.adapter.entity.TeamCreate;
 import com.xuexiang.temical.adapter.entity.User;
 import com.xuexiang.temical.core.BaseFragment;
+
 import com.xuexiang.temical.utils.RandomUtils;
 import com.xuexiang.temical.utils.SettingUtils;
 import com.xuexiang.temical.utils.TokenUtils;

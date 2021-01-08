@@ -18,16 +18,18 @@
 package com.xuexiang.temical.fragment.profile;
 
 import com.xuexiang.temical.R;
+import com.xuexiang.temical.activity.LoginActivity;
 import com.xuexiang.temical.core.BaseFragment;
 import com.xuexiang.temical.fragment.AboutFragment;
 import com.xuexiang.temical.fragment.LoginFragment;
-import com.xuexiang.temical.fragment.SettingsFragment;
+import com.xuexiang.temical.fragment.NotificationFragment;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xpage.enums.CoreAnim;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
 import com.xuexiang.xui.widget.imageview.RadiusImageView;
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView;
+import com.xuexiang.xutil.app.ActivityUtils;
 
 import butterknife.BindView;
 
@@ -39,12 +41,12 @@ import butterknife.BindView;
 public class ProfileFragment extends BaseFragment implements SuperTextView.OnSuperTextViewClickListener {
     @BindView(R.id.riv_head_pic)
     RadiusImageView rivHeadPic;
-    @BindView(R.id.menu_settings)
-    SuperTextView menuSettings;
     @BindView(R.id.menu_about)
     SuperTextView menuAbout;
     @BindView(R.id.menu_account)
     SuperTextView menuAccount;
+    @BindView(R.id.notice)
+    SuperTextView noticeButton;
 
     /**
      * @return 返回为 null意为不需要导航栏
@@ -74,25 +76,23 @@ public class ProfileFragment extends BaseFragment implements SuperTextView.OnSup
 
     @Override
     protected void initListeners() {
-        menuSettings.setOnSuperTextViewClickListener(this);
         menuAbout.setOnSuperTextViewClickListener(this);
         menuAccount.setOnSuperTextViewClickListener(this);
-
+        noticeButton.setOnSuperTextViewClickListener(this);
     }
 
     @SingleClick
     @Override
     public void onClick(SuperTextView view) {
         switch(view.getId()) {
-            case R.id.menu_settings:
-                openNewPage(SettingsFragment.class);
-                break;
             case R.id.menu_about:
                 openNewPage(AboutFragment.class);
                 break;
             case R.id.menu_account:
-                openNewPage(LoginFragment.class);
+                ActivityUtils.startActivity(LoginActivity.class);
                 break;
+            case R.id.notice:
+                openNewPage(NotificationFragment.class);
             default:
                 break;
         }

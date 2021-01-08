@@ -49,13 +49,9 @@
 
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                    android:id="@+id/notice"
                     style="@style/InfoItem.Account"
                     app:sLeftTextString="通知" />
-
-                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    style="@style/InfoItem.Account"
-                    app:sDividerLineType="none"
-                    app:sLeftTextString="收藏" />
 
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
@@ -63,12 +59,6 @@
                     android:layout_marginTop="20dp"
                     app:sDividerLineType="none"
                     app:sLeftTextString="意见反馈" />
-
-                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    android:id="@+id/menu_settings"
-                    style="@style/InfoItem.Account"
-                    android:layout_marginTop="20dp"
-                    app:sLeftTextString="设置" />
 
                 <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                     android:id="@+id/menu_about"

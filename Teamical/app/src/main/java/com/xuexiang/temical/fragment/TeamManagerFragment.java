@@ -180,9 +180,13 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
 
 //        getDemoData();
         getTeammateFromServer(teamName, managerPN);
+        // 只有管理员才有操作权限
+        if (managerPN.equals(CurrentUser.getPhoneNum())) {
+            initListViewListener();
+        }
 
-        QRCodeProduceUtils.Builder builder = XQRCode.newQRCodeBuilder(teamName + "#" + managerPN);
-        qrcode.setImageBitmap(builder.build());
+        //QRCodeProduceUtils.Builder builder = XQRCode.newQRCodeBuilder(teamName +"#"+ managerPN).setSize(400);
+        qrcode.setImageBitmap(XQRCode.createQRCodeWithLogo(teamName +"#"+ managerPN,null));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -267,6 +271,7 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
         mListView.setAdapter(mAdapter);
         mAdapter.refresh(datas);
     }
+
 
     @Override
     protected void initListeners() {

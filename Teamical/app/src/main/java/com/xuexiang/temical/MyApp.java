@@ -27,10 +27,6 @@ import com.xuexiang.temical.utils.sdkinit.UMengInit;
 import com.xuexiang.temical.utils.sdkinit.XBasicLibInit;
 import com.xuexiang.temical.utils.sdkinit.XUpdateInit;
 
-/**
- * @author xuexiang
- * @since 2018/11/7 下午1:12
- */
 public class MyApp extends Application {
 
     @Override
