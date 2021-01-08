@@ -18,6 +18,7 @@
 package com.xuexiang.temical.fragment;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -36,7 +37,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
+import com.xuexiang.temical.adapter.entity.CurrentUser;
+import com.xuexiang.temical.adapter.entity.Event;
 import com.xuexiang.temical.adapter.entity.NewInfo;
+import com.xuexiang.temical.adapter.entity.TeamCreate;
 import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.xaop.annotation.SingleClick;
 import com.xuexiang.xpage.annotation.Page;
@@ -64,6 +68,9 @@ import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.FlipInTopXAnimator;
@@ -150,6 +157,26 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
         //recyclerView.setAdapter(mAdapter = new NewsCardViewListAdapter());
         // 生成一些demo数据
         itemList = DemoDataProvider.getDemoNewInfos();
+        BmobQuery<Event> categoryBmobQuery = new BmobQuery<>();
+        categoryBmobQuery.addWhereEqualTo("username", CurrentUser.getUserName());
+        categoryBmobQuery.findObjects(new FindListener<Event>() {
+            @Override
+            public void done(List<Event> objectLt, BmobException e) {
+                if (e == null) {
+//                    XToastUtils.toast("查询team成功：" + objectLt.get(0).getManagerPN());
+                    //itemList.clear();
+                    // 将所有object装进去
+                    NewInfo newInfo=new NewInfo();
+                    for(int i=0;i<objectLt.size();i++){
+                        newInfo.setTitle(objectLt.get(i).getDetail()) ;
+                        itemList.add(newInfo);
+                    }
+                } else {
+                    Log.e("BMOB, 查询数据失败", e.toString());
+                    XToastUtils.toast(e.getMessage());
+                }
+            }
+        });
         mCirclePop = new EasyPopup(getContext())
                 .setContentView(R.layout.layout_long_click_item)
 //                .setAnimationStyle(R.style.CirclePopAnim)
