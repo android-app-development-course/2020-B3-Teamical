@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
+import com.xuexiang.temical.adapter.entity.CurrentUser;
+import com.xuexiang.temical.adapter.entity.Event;
 import com.xuexiang.xpage.annotation.Page;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
@@ -25,6 +27,8 @@ import com.xuexiang.xutil.data.DateUtils;
 import java.util.Calendar;
 
 import butterknife.BindView;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 @Page(name = "NewEvent")
 public class NewEventFragment extends BaseFragment {
@@ -73,7 +77,20 @@ public class NewEventFragment extends BaseFragment {
         titleBar.addAction(new TitleBar.ImageAction(R.drawable.ic_ok) {
             @Override
             public void performAction(View view) {
-//                XToastUtils.toast("点击了: ok");
+                Event event=new Event();
+                event.setDetail(event_details.getCenterEditValue());
+                event.setUsername(CurrentUser.getUserName());
+                event.save(new SaveListener<String>() {
+                    @Override
+                    public void done(String objectId, BmobException e) {
+                        if (e == null) {
+                            XToastUtils.toast("数据添加成功，返回obejectId为:" + objectId);
+                        } else {
+                            Log.d("BMOB", "创建数据失败: " + e.getMessage());
+                            XToastUtils.toast("创建数据失败: " + e.getMessage());
+                        }
+                    }
+                });
             }
         });
         return titleBar;

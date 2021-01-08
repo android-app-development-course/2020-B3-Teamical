@@ -17,6 +17,7 @@
 
 package com.xuexiang.temical.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -53,7 +55,11 @@ import com.xuexiang.temical.fragment.profile.ProfileFragment;
 import com.xuexiang.temical.fragment.TeamFragment;
 import com.xuexiang.temical.utils.Utils;
 import com.xuexiang.temical.utils.XToastUtils;
+import com.xuexiang.xaop.annotation.IOThread;
+import com.xuexiang.xaop.annotation.Permission;
 import com.xuexiang.xaop.annotation.SingleClick;
+import com.xuexiang.xaop.enums.ThreadType;
+import com.xuexiang.xqrcode.XQRCode;
 import com.xuexiang.xui.adapter.FragmentAdapter;
 import com.xuexiang.xui.utils.ResUtils;
 import com.xuexiang.xui.utils.ThemeUtils;
@@ -69,6 +75,8 @@ import butterknife.BindView;
 import cn.bmob.v3.Bmob;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
+
+import static android.Manifest.permission_group.CAMERA;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener, BottomNavigationView.OnNavigationItemSelectedListener, ClickUtils.OnClick2ExitListener, Toolbar.OnMenuItemClickListener {
 
@@ -90,6 +98,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     DrawerLayout drawerLayout;
 
     private String[] mTitles;
+    static final int REQUEST_CODE = 111;
 
     @Override
     protected int getLayoutId() {
@@ -112,9 +121,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (item.getItemId()) {
             case R.id.action_scan:
                 //点击设置
-                XToastUtils.toast("点击了: 扫描");
+                //XToastUtils.toast("点击了: 扫描");
 //                openNewPage(BackFontTestFragment.class);
-//                doSearchATeam();
+                XQRCode.startScan(this, REQUEST_CODE);
                 break;
             case R.id.action_notifications:
                 openNewPage(NotificationFragment.class);
@@ -124,7 +133,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         }
         return false;
     };
+    @Permission(CAMERA)
+    @IOThread(ThreadType.Single)
+    private void startScan() {
 
+        XQRCode.startScan(this, REQUEST_CODE);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //处理二维码扫描结果
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            //处理扫描结果（在界面上显示）
+            handleScanResult(data);
+        }
+    }
+
+    private void handleScanResult(Intent data) {
+        if (data != null) {
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                if (bundle.getInt(XQRCode.RESULT_TYPE) == XQRCode.RESULT_SUCCESS) {
+                    String result = bundle.getString(XQRCode.RESULT_DATA);
+                    XToastUtils.toast("解析结果:" + result, Toast.LENGTH_LONG);
+                } else if (bundle.getInt(XQRCode.RESULT_TYPE) == XQRCode.RESULT_FAILED) {
+                    XToastUtils.toast("解析二维码失败", Toast.LENGTH_LONG);
+                }
+            }
+        }
+    }
 //    private void doSearchATeam() {
 //        if (CurrentUser.getUserName().length() > 0) {
 //            new MaterialDialog.Builder(this)

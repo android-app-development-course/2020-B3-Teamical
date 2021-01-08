@@ -144,7 +144,9 @@ public class ComplexCalendarFragment extends BaseFragment implements CalendarVie
     private void initRecyclerView() {
         recyclerView.setLayoutManager(new XLinearLayoutManager(recyclerView.getContext()));
         mAdapter=new NewsCardViewListAdapter();
-        recyclerView.setAdapter(new ScaleInAnimationAdapter(mAdapter));
+        ScaleInAnimationAdapter adapter=new ScaleInAnimationAdapter(mAdapter);
+        adapter.setDuration(500);
+        recyclerView.setAdapter(adapter);
         //recyclerView.setAdapter(mAdapter = new NewsCardViewListAdapter());
         // 生成一些demo数据
         itemList = DemoDataProvider.getDemoNewInfos();

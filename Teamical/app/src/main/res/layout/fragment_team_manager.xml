@@ -22,7 +22,18 @@
             app:title="团队成员管理"
             app:titleTextColor="@color/white" />
 
+
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_qrcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:minWidth="200dp"
+        android:minHeight="200dp"
+        android:scaleType="fitXY"
+        android:layout_gravity="center"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

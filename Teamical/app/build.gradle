@@ -149,6 +149,8 @@ dependencies {
     implementation 'tyrantgit:explosionfield:1.0.1'
     implementation 'jp.wasabeef:recyclerview-animators:2.2.7'
     implementation 'cn.bmob.android:bmob-sdk:3.7.8'
+    implementation 'com.github.xuexiangjys:XQRCode:1.0.6'
+
 
 }
 //自动添加X-Library依赖

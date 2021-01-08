@@ -205,6 +205,8 @@ public class TeamFragment extends BaseFragment {
             openNewPage(TeamManagerFragment.class, "key", params);
 //            XToastUtils.toast(itemList.get(position).getTeamName());
         });
+
+
     }
 
     private void initTeamJoinListeners() {

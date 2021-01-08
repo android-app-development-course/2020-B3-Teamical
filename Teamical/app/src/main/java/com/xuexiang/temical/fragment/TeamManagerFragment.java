@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
@@ -78,6 +79,8 @@ import com.xuexiang.temical.utils.Utils;
 import com.xuexiang.temical.utils.XToastUtils;
 import com.xuexiang.temical.widget.SideBar;
 import com.xuexiang.xpage.annotation.Page;
+import com.xuexiang.xqrcode.XQRCode;
+import com.xuexiang.xqrcode.util.QRCodeProduceUtils;
 import com.xuexiang.xui.adapter.recyclerview.XLinearLayoutManager;
 import com.xuexiang.xui.utils.ThemeUtils;
 import com.xuexiang.xui.widget.actionbar.TitleBar;
@@ -112,6 +115,8 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
     EditText mSearchInput;
     @BindView(R.id.school_friend_member)
     ListView mListView;
+    @BindView(R.id.iv_qrcode)
+    AppCompatImageView qrcode;
 
     private TextView mFooterView;
     private int choose = -1;
@@ -151,6 +156,9 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
         if (managerPN.equals(CurrentUser.getPhoneNum())) {
             initListViewListener();
         }
+
+        QRCodeProduceUtils.Builder builder = XQRCode.newQRCodeBuilder(teamName+"|"+managerPN);
+        qrcode.setImageBitmap(builder.build());
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -238,6 +246,15 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
     @Override
     protected TitleBar initTitle() {
         return null;
+//        TitleBar titleBar = super.initTitle();
+//        titleBar.addAction(new TitleBar.ImageAction(R.drawable.ic_qr) {
+//            @Override
+//            public void performAction(View view) {
+//                //showSimpleConfirmDialog();
+//                XToastUtils.toast("清空消息");
+//            }
+//        });
+//        return titleBar;
     }
 
 
