@@ -89,6 +89,7 @@ import com.xuexiang.xui.widget.dialog.bottomsheet.BottomSheet;
 import com.xuexiang.xui.widget.dialog.materialdialog.MaterialDialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -181,12 +182,12 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
 //        getDemoData();
         getTeammateFromServer(teamName, managerPN);
         // 只有管理员才有操作权限
-        if (managerPN.equals(CurrentUser.getPhoneNum()) && itemList.size() > 0) {
+        if (managerPN.equals(CurrentUser.getPhoneNum()) && itemList.size() > 0 || true) {
             initListViewListener();
         }
 
         //QRCodeProduceUtils.Builder builder = XQRCode.newQRCodeBuilder(teamName +"#"+ managerPN).setSize(400);
-        qrcode.setImageBitmap(XQRCode.createQRCodeWithLogo(teamName +"#"+ managerPN,null));
+        qrcode.setImageBitmap(XQRCode.createQRCodeWithLogo(teamName + "#" + managerPN, null));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -253,6 +254,9 @@ public class TeamManagerFragment extends BaseFragment implements SideBar
         for (int i = 0; i < itemList.size(); i++) {
             texts.add(itemList.get(i).getMateName());
         }
+        String[] demo = new String[]{"张三", "李四", "王五", "七七", "可莉", "迪卢克", "刻晴", "芭芭拉", "香菱", "凯亚"};
+        texts.addAll(Arrays.asList(demo));
+
         parser(texts);
     }
 
